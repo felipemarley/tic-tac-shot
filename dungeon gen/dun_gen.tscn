@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://b80ky2cjxasy1"]
+
+[ext_resource type="Script" uid="uid://dhqsaaaaxbfgt" path="res://dungeon gen/dun_gen.gd" id="1_uxiet"]
+[ext_resource type="MeshLibrary" uid="uid://btl7smk56crdg" path="res://dungeon gen/DungeonTile.tres" id="2_4jv8r"]
+
+[node name="DunGen" type="Node3D"]
+script = ExtResource("1_uxiet")
+border_size = 5
+
+[node name="GridMap" type="GridMap" parent="."]
+mesh_library = ExtResource("2_4jv8r")
+cell_size = Vector3(1, 1, 1)
+cell_center_y = false
+data = {
+"cells": PackedInt32Array(65489, 450, 3, 65495, 449, 3, 65501, 448, 3, 65507, 447, 3, 12, 439, 3, 138, 398, 3, 172, 380, 3, 212, 362, 3, 230, 349, 3, 243, 339, 3, 253, 329, 3, 275, 284, 3, 294, 212, 3, 300, 152, 3, 298, 121, 3, 285, 87, 3, 267, 23, 3, 238, 65458, 3, 216, 65361, 3, 200, 65306, 3, 197, 65298, 3, 298, 65215, 3, 297, 65218, 3, 306, 65234, 3, 309, 65239, 3, 308, 65245, 3, 313, 65289, 3, 317, 65430, 3, 65535, 65535, 3, 0, 65535, 3, 1, 65535, 3, 2, 65535, 3, 3, 65535, 3, 4, 65535, 3, 5, 65535, 3)
+}
