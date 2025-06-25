@@ -13,9 +13,15 @@ extends Node3D
 var room_tiles : Array[PackedVector3Array] = []
 var room_positions : PackedVector3Array = []
 @export_range(0, 1) var survival_chance: float = 0.25
+@export_multiline var custom_seed : String = "" : set = set_seed
+
+func set_seed(val: String) -> void:
+	custom_seed = val
+	seed(val.hash())
 
 func set_start (val:bool) -> void:
-	generate()
+	if Engine.is_editor_hint():
+		generate()
 
 func set_border_size (val: int) -> void:
 	border_size = val
@@ -33,6 +39,7 @@ func visualize_border():
 func generate():
 	room_tiles.clear()
 	room_positions.clear()
+	if custom_seed : set_seed(custom_seed)
 	visualize_border()
 	
 	for i in room_num:
@@ -108,6 +115,27 @@ func create_hallways(halleay_graph : AStar2D):
 				hallways.append(hallway)
 				grid_map.set_cell_item(tile_from, 2)
 				grid_map.set_cell_item(tile_to, 2)
+				
+	var astar : AStarGrid2D = AStarGrid2D.new()
+	astar.size = Vector2i.ONE * border_size
+	astar.update()
+	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER
+	astar.default_estimate_heuristic =AStarGrid2D.HEURISTIC_MANHATTAN
+	
+	for t in grid_map.get_used_cells_by_item(0):
+		astar.set_point_solid(Vector2i(t.x, t.z))
+		
+	for h in hallways:
+		var pos_from : Vector2i = Vector2i(h[0].x, h[0].z)
+		var pos_to : Vector2i = Vector2i(h[1].x, h[1].z)
+		var hall : PackedVector2Array = astar.get_point_path(pos_from, pos_to)
+		
+		for t in hall: 
+			var pos : Vector3i = Vector3i(t.x, 0, t.y)
+			if grid_map.get_cell_item(pos) < 0:
+				grid_map.set_cell_item(pos, 1)
+		
+		
 				
 func make_room(rec:int):
 	if !rec > 0:
