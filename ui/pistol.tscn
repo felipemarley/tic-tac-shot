@@ -1,0 +1,56 @@
+[gd_scene load_steps=7 format=3 uid="uid://bcoqs5sdfav7a"]
+
+[ext_resource type="Texture2D" uid="uid://capvqc8x5kitn" path="res://sprites/character/Idle.png" id="1_37ndy"]
+[ext_resource type="Texture2D" uid="uid://bcx6d78w228hv" path="res://sprites/character/Shoot1.png" id="2_e41n0"]
+[ext_resource type="Texture2D" uid="uid://duoapdmbxjeyb" path="res://sprites/character/Shoot2.png" id="3_5mq4n"]
+[ext_resource type="Texture2D" uid="uid://c77i4nhidhwff" path="res://sprites/character/Shoot3.png" id="4_ubo51"]
+[ext_resource type="Texture2D" uid="uid://bwvdyda7j6n36" path="res://sprites/character/Shoot4.png" id="5_0coxl"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_6jkws"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_37ndy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_e41n0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_5mq4n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_ubo51")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_0coxl")
+}],
+"loop": true,
+"name": &"Shoot",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Pistol" type="Node3D"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CanvasLayer/Control"]
+texture_filter = 1
+position = Vector2(0, -114)
+scale = Vector2(4, 4)
+sprite_frames = SubResource("SpriteFrames_6jkws")
+animation = &"Shoot"
