@@ -1,8 +1,6 @@
 @tool
 extends Node3D
-
 @onready var grid_map : GridMap = $GridMap 
-
 @export var start: bool = false : set = set_start
 @export var border_size: int = 20 : set = set_border_size
 @export var min_room_size: int = 2
@@ -14,6 +12,8 @@ var room_tiles : Array[PackedVector3Array] = []
 var room_positions : PackedVector3Array = []
 @export_range(0, 1) var survival_chance: float = 0.25
 @export_multiline var custom_seed : String = "" : set = set_seed
+signal dungeon_ready
+@onready var dungeon_mesh : Node3D = $DunMesh
 
 func set_seed(val: String) -> void:
 	custom_seed = val
@@ -93,6 +93,8 @@ func generate():
 					hallway_graph.connect_points(p, c)
 					
 	create_hallways(hallway_graph)
+	dungeon_mesh.create_dungeon()
+	dungeon_ready.emit()
 	
 func create_hallways(halleay_graph : AStar2D):
 	var hallways : Array[PackedVector3Array] = []

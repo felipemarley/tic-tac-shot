@@ -25,7 +25,7 @@ func create_dungeon():
 		var cell_index : int = grid_map.get_cell_item(cell)
 		if cell_index <= 2 and cell_index >= 0:
 			var dun_cell : Node3D = dun_cell_scene.instantiate()
-			dun_cell.position = Vector3(cell) + Vector3(0.5, 0, 0.5)
+			dun_cell.position = Vector3(cell) + Vector3(1, 0, 1)
 			add_child(dun_cell)
 			t += 1
 			for i in 4:
@@ -37,6 +37,7 @@ func create_dungeon():
 					var key : String = str(cell_index) + str(cell_n_index)
 					call("handle_"+key,dun_cell,directions.keys()[i])
 		if t%10 == 9 : await get_tree().create_timer(0).timeout
+	grid_map.clear()
 					
 func handle_none(cell:Node3D,dir:String):
 	cell.call("remove_door_"+dir)

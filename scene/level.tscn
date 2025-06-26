@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://obsdy7suhl34"]
+
+[ext_resource type="Script" uid="uid://bmrejn70iexv8" path="res://scene/level.gd" id="1_36wlx"]
+[ext_resource type="PackedScene" uid="uid://b80ky2cjxasy1" path="res://dungeon_gen/dun_gen.tscn" id="2_dmi07"]
+
+[node name="Level" type="Node3D"]
+script = ExtResource("1_36wlx")
+
+[node name="DunGen" parent="." instance=ExtResource("2_dmi07")]
