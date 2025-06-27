@@ -2,6 +2,7 @@ extends Node3D
 @onready var dun_gen = $DunGen
 @onready var player : PackedScene = preload("res://scene/player.tscn")
 
+
 func _ready() -> void:
 	dun_gen.dungeon_ready.connect(on_dungeon_ready)
 	dun_gen.generate()

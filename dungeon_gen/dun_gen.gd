@@ -94,6 +94,7 @@ func generate():
 					
 	create_hallways(hallway_graph)
 	dungeon_mesh.create_dungeon()
+	await get_tree().create_timer(1).timeout
 	dungeon_ready.emit()
 	
 func create_hallways(halleay_graph : AStar2D):
