@@ -40,7 +40,7 @@ shape = SubResource("CapsuleShape3D_ulb22")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
 sprite_frames = SubResource("SpriteFrames_b7koy")
-animation = &"O"
+animation = &"X"
 
 [node name="StateMachine" type="Node3D" parent="." node_paths=PackedStringArray("starting_state")]
 script = ExtResource("3_b7koy")

@@ -19,4 +19,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.364741, 0)
 [node name="Camera3D" type="Camera3D" parent="Head"]
 
 [node name="Pistol" parent="Head" instance=ExtResource("1_xo3ru")]
-transform = Transform3D(-0.0387367, 0, 0.99925, 0, 1, 0, -0.99925, 0, -0.0387367, -0.0242915, -0.576506, -0.0120692)
+transform = Transform3D(-0.0387367, 0, 0.99925, 0, 1, 0, -0.99925, 0, -0.0387367, -0.0310998, -0.587313, -0.0249293)
+cam_path = NodePath("../Camera3D")

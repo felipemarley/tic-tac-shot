@@ -1,5 +1,5 @@
 extends CharacterBody3D
-
+@onready var pistol = $Head/Pistol
 
 const SPEED = 4.5
 const JUMP_VELOCITY = 4.5
@@ -9,8 +9,13 @@ func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
 func _input(event) -> void:
-	if event is InputEventMouseMotion:
+	if Input.is_key_pressed(KEY_E):
+		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		else: Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	if event is InputEventMouseMotion :
 		rotation_degrees.y -= event.relative.x * MOUSE_SENS
+		pistol.rotation_degrees.y = rotation_degrees.y
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
