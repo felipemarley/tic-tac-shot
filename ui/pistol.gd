@@ -21,6 +21,7 @@ func check_and_shoot():
 	var enemies = check_raycast_query()
 	if enemies:
 		if enemies.collider.is_in_group("enemies"):
+			enemies.collider.call_deferred("queue_free")
 			print("SHOOT")
 		else:
 			print("NOT SHOOT")

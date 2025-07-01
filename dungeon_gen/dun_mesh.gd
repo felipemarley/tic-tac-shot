@@ -16,7 +16,6 @@ func set_start(val:bool)->void:
 		create_dungeon()
 		
 func create_dungeon():
-
 	for c in get_children():
 		remove_child(c)
 		c.queue_free()
@@ -36,8 +35,8 @@ func create_dungeon():
 				else:
 					var key : String = str(cell_index) + str(cell_n_index)
 					call("handle_"+key,dun_cell,directions.keys()[i])
-		if t%10 == 9 : await get_tree().create_timer(0).timeout
-	grid_map.clear()
+		#if t%10 == 9 : await get_tree().create_timer(0).timeout
+	#grid_map.clear()
 					
 func handle_none(cell:Node3D,dir:String):
 	cell.call("remove_door_"+dir)
