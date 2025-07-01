@@ -4,7 +4,7 @@ extends Node3D
 @export var starting_state : State 
 var current_state : State
 
-func _init() -> void:
+func _ready() -> void:
 	change_state(starting_state)
 
 func process_physics(delta: float) -> void:

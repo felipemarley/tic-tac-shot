@@ -7,8 +7,8 @@
 [ext_resource type="Script" uid="uid://crti6hl6vcpcl" path="res://state_machine/state.gd" id="4_yvcfn"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ulb22"]
-radius = 1.39825
-height = 9.73964
+radius = 0.450369
+height = 2.26292
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_b7koy"]
 animations = [{
@@ -29,7 +29,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Enemy" type="CharacterBody3D"]
+[node name="Enemy" type="CharacterBody3D" groups=["enemies"]]
 collision_layer = 4
 collision_mask = 3
 script = ExtResource("1_yvcfn")
@@ -39,6 +39,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0594298, 0, 0)
 shape = SubResource("CapsuleShape3D_ulb22")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
 sprite_frames = SubResource("SpriteFrames_b7koy")
 animation = &"X"
 

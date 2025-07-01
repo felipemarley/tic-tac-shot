@@ -19,16 +19,15 @@ func _input(event: InputEvent) -> void:
 		
 func check_and_shoot():
 	var enemies = check_raycast_query()
-	print(enemies)
 	if enemies:
-		if enemies.collider is StaticBody3D:
+		if enemies.collider.is_in_group("enemies"):
 			print("SHOOT")
-	else:
-		print("NOT SHOOT")
+		else:
+			print("NOT SHOOT")
 func check_raycast_query() -> Dictionary:
 	var space_state = get_world_3d().direct_space_state
 	var origin = get_node(cam_path).global_position
-	var end = get_node(cam_path).global_position + -get_node(cam_path).global_transform.basis.z * 4
+	var end = get_node(cam_path).global_position + -get_node(cam_path).global_transform.basis.z * 5
 	var query = PhysicsRayQueryParameters3D.create(origin, end)
 	query.collide_with_areas = true
 	var result : Dictionary = space_state.intersect_ray(query)
