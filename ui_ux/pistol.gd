@@ -3,6 +3,7 @@ extends Node3D
 @onready var animation : AnimationPlayer = $AnimationPlayer
 @onready var hit_box : Area3D = $Hit
 @export_node_path("Camera3D") var cam_path
+@onready var shoot: AudioStreamPlayer = $Shoot
 
 
 # Called when the node enters the scene tree for the first time.
@@ -15,6 +16,7 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
 		animation.play("Shoot")
+		shoot.play()
 		check_and_shoot()
 		
 func check_and_shoot():

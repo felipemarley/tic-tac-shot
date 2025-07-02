@@ -1,9 +1,11 @@
 extends CharacterBody3D
 @onready var pistol = $Head/Pistol
+@onready var footsteps_sfx = $Footsteps
 
 const SPEED = 4.5
 const JUMP_VELOCITY = 4.5
 const MOUSE_SENS = 0.7
+
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -31,9 +33,11 @@ func _physics_process(delta: float) -> void:
 	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
+		footsteps_sfx.play()
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
 	else:
+		footsteps_sfx.stop()
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 

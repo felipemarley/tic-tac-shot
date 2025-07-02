@@ -1,11 +1,12 @@
-[gd_scene load_steps=12 format=3 uid="uid://bcoqs5sdfav7a"]
+[gd_scene load_steps=13 format=3 uid="uid://bcoqs5sdfav7a"]
 
 [ext_resource type="Texture2D" uid="uid://capvqc8x5kitn" path="res://sprites/character/Idle.png" id="1_37ndy"]
-[ext_resource type="Script" uid="uid://clndh0dni3n08" path="res://ui/pistol.gd" id="1_e41n0"]
+[ext_resource type="Script" uid="uid://clndh0dni3n08" path="res://ui_ux/pistol.gd" id="1_e41n0"]
 [ext_resource type="Texture2D" uid="uid://bcx6d78w228hv" path="res://sprites/character/Shoot1.png" id="2_e41n0"]
 [ext_resource type="Texture2D" uid="uid://duoapdmbxjeyb" path="res://sprites/character/Shoot2.png" id="3_5mq4n"]
 [ext_resource type="Texture2D" uid="uid://c77i4nhidhwff" path="res://sprites/character/Shoot3.png" id="4_ubo51"]
 [ext_resource type="Texture2D" uid="uid://bwvdyda7j6n36" path="res://sprites/character/Shoot4.png" id="5_0coxl"]
+[ext_resource type="AudioStream" uid="uid://ddwtobuq5elue" path="res://ui_ux/sounds/shoot-6-81136.mp3" id="7_3djli"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_6jkws"]
 animations = [{
@@ -140,5 +141,9 @@ animation = &"Idle"
 libraries = {
 &"": SubResource("AnimationLibrary_0coxl")
 }
+
+[node name="Shoot" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_3djli")
+volume_db = -7.0
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
