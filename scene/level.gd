@@ -7,7 +7,7 @@ var player_instance : CharacterBody3D = null
 func _ready() -> void:
 	dun_gen.dungeon_ready.connect(on_dungeon_ready)
 	dun_gen.generate()
-	
+
 func on_dungeon_ready() -> void:
 	var positions : PackedVector3Array = dun_gen.room_positions
 	var index : int = randi() % positions.size()
