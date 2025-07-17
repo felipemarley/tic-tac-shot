@@ -1,15 +1,26 @@
 extends CharacterBody3D
 @onready var pistol = $Head/Pistol
-@onready var footsteps_sfx = $Footsteps
+@onready var footsteps_sfx: AudioStreamPlayer3D = $Footsteps
+@onready var land_sfx: AudioStreamPlayer3D = $LandingSound
+
+var footstep_sounds: Array[AudioStream] = []
 
 const SPEED = 4.5
 const JUMP_VELOCITY = 4.5
 const MOUSE_SENS = 0.7
+const FOOTSTEP_INTERVAL = 0.4
 
+var step_timer = 0.0
+var was_on_floor = false
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	
+	footstep_sounds = [
+		preload("res://scene/st1-footstep-sfx-323053.mp3"),
+		preload("res://ui_ux/sounds/st2-footstep-sfx-323055.mp3"),
+		preload("res://ui_ux/sounds/st3-footstep-sfx-323056.mp3"),
+	]
+
 func _input(event) -> void:
 	if Input.is_key_pressed(KEY_E):
 		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -21,24 +32,49 @@ func _input(event) -> void:
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
+	_apply_gravity(delta)
+
+	_handle_jump()
+	_detect_landing()
+
+	_handle_movement(delta)
+	move_and_slide()
+
+
+func _apply_gravity(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
-	# Handle jump.
+# Handle jump.
+func _handle_jump() -> void:
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
-	# Get the input direction and handle the movement/deceleration.
+func _detect_landing() -> void:
+	if not was_on_floor and is_on_floor():
+		land_sfx.play()
+	was_on_floor = is_on_floor()
+
+# Get the input direction and handle the movement/deceleration.
+func _handle_movement(delta: float) -> void:
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	if direction:
-		footsteps_sfx.play()
+
+	if direction.length() > 0.1 and is_on_floor():
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
+		_handle_footsteps(delta)
 	else:
-		footsteps_sfx.stop()
+		step_timer = 0.0
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 
-	move_and_slide()
+func _handle_footsteps(delta: float) -> void:
+	step_timer -= delta
+	if step_timer <= 0.0:
+		if not footstep_sounds.is_empty(): # Adição da verificação
+			footsteps_sfx.stream = footstep_sounds[randi() % footstep_sounds.size()]
+			footsteps_sfx.pitch_scale = randf_range(0.9, 1.1)
+			footsteps_sfx.play()
+		step_timer = FOOTSTEP_INTERVAL

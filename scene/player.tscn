@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://e1w0n8q008ub"]
+[gd_scene load_steps=5 format=3 uid="uid://e1w0n8q008ub"]
 
 [ext_resource type="Script" uid="uid://br2ijnxbj6ovr" path="res://scene/player.gd" id="1_hjaqi"]
 [ext_resource type="PackedScene" uid="uid://bcoqs5sdfav7a" path="res://ui_ux/pistol.tscn" id="1_xo3ru"]
+[ext_resource type="AudioStream" uid="uid://buwdx34sepcvq" path="res://ui_ux/sounds/land2-43790.mp3" id="3_fvtld"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hjaqi"]
 radius = 0.25
@@ -24,3 +25,11 @@ cam_path = NodePath("../Camera3D")
 
 [node name="Footsteps" type="AudioStreamPlayer3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.837252, 0)
+attenuation_model = 1
+bus = &"Footsteps"
+
+[node name="LandingSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_fvtld")
+attenuation_model = 1
+pitch_scale = 1.8
+bus = &"Land"

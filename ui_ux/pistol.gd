@@ -9,7 +9,7 @@ extends Node3D
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	animation.play("Idle")
-	
+
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -18,7 +18,7 @@ func _input(event: InputEvent) -> void:
 		animation.play("Shoot")
 		shoot.play()
 		check_and_shoot()
-		
+
 func check_and_shoot():
 	var enemies = check_raycast_query()
 	if enemies:
