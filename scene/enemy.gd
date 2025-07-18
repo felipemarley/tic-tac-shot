@@ -1,6 +1,9 @@
 class_name Enemy
 extends CharacterBody3D
 
+signal damaged(amount: int)
+signal died_and_killed()
+
 @onready var navigation : NavigationAgent3D = $NavigationAgent3D
 @onready var health_component = $HealthComponent
 var player_ref : CharacterBody3D = null
@@ -9,12 +12,15 @@ const MOVE_SPEED : float = 10
 @export var attack_damage: int = 10
 @export var attack_cooldown: float = 0.5
 @export var attack_range: float = 0.9 # Distância para o inimigo atacar o player
-
 var attack_timer: Timer = null # Será inicializado no _ready
 
 func _ready():
 	if health_component:
 		health_component.died.connect(_on_died)
+
+	# quando alguém emitir damaged, health_component aplica o dano.
+	damaged.connect(health_component.take_damage)
+
 	# Para ser detectado pelo raycast da pistola
 	add_to_group("enemies")
 
@@ -67,6 +73,6 @@ func _on_attack_cooldown_finished():
 func _on_died():
 	print("MORREU")
 	velocity = Vector3.ZERO
-	get_tree().get_current_scene().add_kill()
+	died_and_killed.emit()
 
 	queue_free()
