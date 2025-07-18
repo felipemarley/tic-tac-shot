@@ -24,6 +24,7 @@ func check_and_shoot():
 	if enemies:
 		if enemies.collider.is_in_group("enemies"):
 			enemies.collider.call_deferred("queue_free")
+			get_tree().get_current_scene().add_kill()
 			print("SHOOT")
 		else:
 			print("NOT SHOOT")
