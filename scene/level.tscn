@@ -7,3 +7,12 @@
 script = ExtResource("1_36wlx")
 
 [node name="DunGen" parent="." instance=ExtResource("2_dmi07")]
+
+[node name="KillLabel" type="Label" parent="."]
+offset_left = 17.0
+offset_top = 8.0
+offset_right = 148.0
+offset_bottom = 48.0
+theme_override_font_sizes/font_size = 29
+text = "Kills: 0"
+vertical_alignment = 1

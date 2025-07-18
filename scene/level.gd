@@ -3,6 +3,7 @@ extends Node3D
 @onready var player : PackedScene = preload("res://scene/player.tscn")
 @onready var enemies : PackedScene = preload("res://scene/enemy.tscn")
 var player_instance : CharacterBody3D = null
+var kill_count: int = 0
 
 func _ready() -> void:
 	dun_gen.dungeon_ready.connect(on_dungeon_ready)
@@ -30,3 +31,12 @@ func enemy_spawn() -> void:
 				var e = enemies.instantiate()
 				add_child(e)
 				e.global_position = Vector3(cell) + Vector3(0.5, 1, 0.5)
+
+func add_kill():
+	kill_count += 1
+	update_kill_label()
+
+func update_kill_label():
+	var label = $KillLabel
+	if label:
+		label.text = "Kills: %d" % kill_count
