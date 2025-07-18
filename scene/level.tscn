@@ -1,14 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://obsdy7suhl34"]
+[gd_scene load_steps=4 format=3 uid="uid://obsdy7suhl34"]
 
 [ext_resource type="Script" uid="uid://bmrejn70iexv8" path="res://scene/level.gd" id="1_36wlx"]
+[ext_resource type="PackedScene" uid="uid://bhghrhbcmnu10" path="res://scene/HUD.tscn" id="2_7g0b6"]
 [ext_resource type="PackedScene" uid="uid://b80ky2cjxasy1" path="res://dungeon_gen/dun_gen.tscn" id="2_dmi07"]
 
 [node name="Level" type="Node3D"]
 script = ExtResource("1_36wlx")
 
-[node name="DunGen" parent="." instance=ExtResource("2_dmi07")]
+[node name="HUD" parent="." instance=ExtResource("2_7g0b6")]
 
-[node name="KillLabel" type="Label" parent="."]
+[node name="KillLabel" type="Label" parent="HUD"]
+layout_mode = 0
 offset_left = 17.0
 offset_top = 8.0
 offset_right = 148.0
@@ -16,3 +18,5 @@ offset_bottom = 48.0
 theme_override_font_sizes/font_size = 29
 text = "Kills: 0"
 vertical_alignment = 1
+
+[node name="DunGen" parent="." instance=ExtResource("2_dmi07")]

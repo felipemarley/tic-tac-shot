@@ -7,8 +7,8 @@ var player_ref : CharacterBody3D = null
 const MOVE_SPEED : float = 10
 
 @export var attack_damage: int = 10
-@export var attack_cooldown: float = 1.0
-@export var attack_range: float = 1.0 # Distância para o inimigo atacar o player
+@export var attack_cooldown: float = 0.5
+@export var attack_range: float = 0.9 # Distância para o inimigo atacar o player
 
 var attack_timer: Timer = null # Será inicializado no _ready
 

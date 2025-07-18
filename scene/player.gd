@@ -3,6 +3,7 @@ extends CharacterBody3D
 @onready var footsteps_sfx: AudioStreamPlayer3D = $Footsteps
 @onready var land_sfx: AudioStreamPlayer3D = $LandingSound
 @onready var health_component = $HealthComponent
+@onready var hud: Control = null
 
 var footstep_sounds: Array[AudioStream] = []
 
@@ -21,6 +22,11 @@ func _ready() -> void:
 		preload("res://ui_ux/sounds/st2-footstep-sfx-323055.mp3"),
 		preload("res://ui_ux/sounds/st3-footstep-sfx-323056.mp3"),
 	]
+
+	hud = get_tree().get_root().find_child("HUD", true, false)
+	if hud:
+		if health_component:
+			hud.set_player_health_component(health_component)
 
 	if health_component:
 		health_component.died.connect(_on_died)
