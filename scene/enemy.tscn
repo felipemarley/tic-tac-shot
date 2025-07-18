@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://cq1brr8ebu4il"]
+[gd_scene load_steps=8 format=3 uid="uid://cq1brr8ebu4il"]
 
 [ext_resource type="Texture2D" uid="uid://5t6yw15hr5o4" path="res://sprites/enemies/O.png" id="1_f87vc"]
 [ext_resource type="Script" uid="uid://de82xbscr6p8l" path="res://scene/enemy.gd" id="1_yvcfn"]
 [ext_resource type="Texture2D" uid="uid://cmmca2nm4p7gb" path="res://sprites/enemies/X.png" id="2_8u16h"]
+[ext_resource type="Script" uid="uid://ca72tsi8ai8g4" path="res://scripts/HealthComponent.gd" id="4_b7koy"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ulb22"]
 radius = 0.302731
@@ -34,6 +35,9 @@ radius = 12.3794
 collision_layer = 4
 collision_mask = 3
 script = ExtResource("1_yvcfn")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("4_b7koy")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0594298, 0, 0)
