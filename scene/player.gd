@@ -2,6 +2,8 @@ extends CharacterBody3D
 @onready var pistol = $Head/Pistol
 @onready var footsteps_sfx: AudioStreamPlayer3D = $Footsteps
 @onready var land_sfx: AudioStreamPlayer3D = $LandingSound
+@onready var health_component = $HealthComponent
+@onready var hud: Control = null
 
 var footstep_sounds: Array[AudioStream] = []
 
@@ -21,6 +23,14 @@ func _ready() -> void:
 		preload("res://ui_ux/sounds/st3-footstep-sfx-323056.mp3"),
 	]
 
+	hud = get_tree().get_root().find_child("HUD", true, false)
+	if hud:
+		if health_component:
+			hud.set_player_health_component(health_component)
+
+	if health_component:
+		health_component.died.connect(_on_died)
+
 func _input(event) -> void:
 	if Input.is_key_pressed(KEY_E):
 		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -31,6 +41,11 @@ func _input(event) -> void:
 		pistol.rotation_degrees.y = rotation_degrees.y
 
 func _physics_process(delta: float) -> void:
+	if health_component and health_component.is_dead:
+		velocity = Vector3.ZERO
+		move_and_slide()
+		return
+
 	# Add the gravity.
 	_apply_gravity(delta)
 
@@ -78,3 +93,19 @@ func _handle_footsteps(delta: float) -> void:
 			footsteps_sfx.pitch_scale = randf_range(0.9, 1.1)
 			footsteps_sfx.play()
 		step_timer = FOOTSTEP_INTERVAL
+
+func take_damage(amount: int):
+	if health_component:
+		health_component.take_damage(amount)
+		print("Player tomou " + str(amount) + " de dano. HP: " + str(health_component.current_hp))
+
+func _on_died():
+	print("GAME OVER")
+	velocity = Vector3.ZERO
+	set_physics_process(false)
+
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+	# Reinicia cena
+	await get_tree().create_timer(1.0).timeout
+	get_tree().reload_current_scene()

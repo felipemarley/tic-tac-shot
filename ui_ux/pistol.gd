@@ -20,14 +20,13 @@ func _input(event: InputEvent) -> void:
 		check_and_shoot()
 
 func check_and_shoot():
-	var enemies = check_raycast_query()
-	if enemies:
-		if enemies.collider.is_in_group("enemies"):
-			enemies.collider.call_deferred("queue_free")
-			get_tree().get_current_scene().add_kill()
-			print("SHOOT")
-		else:
-			print("NOT SHOOT")
+	var result = check_raycast_query()
+	if result and result.collider.is_in_group("enemies"):
+		var enemy = result.collider
+		enemy.damaged.emit(1)
+	else:
+		print("NOT SHOOT")
+
 func check_raycast_query() -> Dictionary:
 	var space_state = get_world_3d().direct_space_state
 	var origin = get_node(cam_path).global_position
