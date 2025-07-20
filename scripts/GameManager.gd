@@ -156,19 +156,14 @@ func _on_fps_phase_ended(won: bool) -> void:
 			print("GameManager: Turno do Jogo da Velha. Próximo jogador: ", current_player_side)
 			if current_player_side == PlayerSide.O:
 				_process_ai_turn()
-
-
 	else: # Perdeu a fase FPS
 		print("GameManager: Fase FPS Perdida!")
 		_switch_player_turn() # Apenas passa a vez (não marca a célula)
 		_set_game_state(GameState.TIC_TAC_TOE_TURN)
+		# Se o próximo turno for da IA, ela joga automaticamente
 		print("GameManager: Turno do Jogo da Velha. Próximo jogador: ", current_player_side)
-
-	# Lógica temporária de recarga da cena (para testes)
-	# No jogo final, você transicionaria para a UI do tabuleiro ou tela de Game Over.
-	#await get_tree().create_timer(1.0).timeout
-	#get_tree().reload_current_scene()
-	#Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		if current_player_side == PlayerSide.O:
+			_process_ai_turn()
 
 # Função auxiliar para trocar o turno
 func _switch_player_turn() -> void:
@@ -202,7 +197,6 @@ func teleport_cheat_enemies_in_front(player_pos: Vector3, player_forward_dir: Ve
 
 		enemy.global_position = teleport_position # TELEPORTA o inimigo
 		teleported_enemies_count += 1
-		print("Cheat: Teleported enemy " + enemy.name + " to " + str(teleport_position))
 
 	print("Cheat: Teleported " + str(teleported_enemies_count) + " existing enemies to player front.")
 	# Não precisamos ajustar enemies_in_current_round aqui, pois estamos teleportando os existentes,
