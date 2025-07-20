@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="tic-tac-shot"
-run/main_scene="uid://b80ky2cjxasy1"
+run/main_scene="uid://igpcrmknujb7"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -20,6 +20,9 @@ config/icon="res://icon.svg"
 GameManager="*res://scripts/GameManager.gd"
 
 [editor]
+
+version_control/plugin_name="GitPlugin"
+version_control/autoload_on_startup=true
 
 [global_group]
 

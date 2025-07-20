@@ -30,3 +30,8 @@ func die():
 	if is_dead: return
 	is_dead = true
 	died.emit()
+
+func reset_health():
+	current_hp = max_hp
+	is_dead = false
+	health_changed.emit(current_hp)

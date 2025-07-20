@@ -63,7 +63,6 @@ func _deal_damage_to_player():
 	if is_instance_valid(player_ref) and player_ref.has_method("take_damage"):
 		player_ref.take_damage(attack_damage)
 		attack_timer.start() # Inicia o timer de cooldown
-		#print(name + " causou " + str(attack_damage) + " de dano ao Player. Próximo ataque em " + str(attack_cooldown) + "s.")
 
 # SEM USOS ATUALMENTE
 # timer chamará quando o cooldown acabar

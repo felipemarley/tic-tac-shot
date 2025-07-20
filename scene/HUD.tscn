@@ -11,19 +11,19 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_mmka4")
 
-[node name="HpLabel" type="Label" parent="."]
-layout_mode = 1
+[node name="Labels" type="Node" parent="."]
+
+[node name="HpLabel" type="Label" parent="Labels"]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -40.0
-offset_bottom = 23.0
+offset_left = -187.0
+offset_bottom = 42.0
 grow_horizontal = 0
 theme_override_font_sizes/font_size = 30
 text = "HP: 100 / 100"
 
-[node name="KillLabel" type="Label" parent="."]
-layout_mode = 0
+[node name="KillLabel" type="Label" parent="Labels"]
 offset_left = 17.0
 offset_top = 8.0
 offset_right = 148.0
@@ -31,3 +31,75 @@ offset_bottom = 48.0
 theme_override_font_sizes/font_size = 29
 text = "Kills: 0"
 vertical_alignment = 1
+
+[node name="GameStatusLabel" type="Label" parent="Labels"]
+offset_left = 371.0
+offset_top = 122.0
+offset_right = 679.0
+offset_bottom = 145.0
+text = "Tic-Tac-Shot"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TurnLabel" type="Label" parent="Labels"]
+offset_left = 378.0
+offset_top = 153.0
+offset_right = 686.0
+offset_bottom = 176.0
+
+[node name="TicTacToeBoardContainer" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = 375.0
+offset_top = 181.0
+offset_right = 683.0
+offset_bottom = 489.0
+
+[node name="TicTacToeGrid" type="GridContainer" parent="TicTacToeBoardContainer"]
+layout_mode = 2
+columns = 3
+
+[node name="Cell_0_0" type="Button" parent="TicTacToeBoardContainer/TicTacToeGrid"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Cell_0_1" type="Button" parent="TicTacToeBoardContainer/TicTacToeGrid"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Cell_0_2" type="Button" parent="TicTacToeBoardContainer/TicTacToeGrid"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Cell_1_0" type="Button" parent="TicTacToeBoardContainer/TicTacToeGrid"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Cell_1_1" type="Button" parent="TicTacToeBoardContainer/TicTacToeGrid"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Cell_1_2" type="Button" parent="TicTacToeBoardContainer/TicTacToeGrid"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Cell_2_0" type="Button" parent="TicTacToeBoardContainer/TicTacToeGrid"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Cell_2_1" type="Button" parent="TicTacToeBoardContainer/TicTacToeGrid"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Cell_2_2" type="Button" parent="TicTacToeBoardContainer/TicTacToeGrid"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="RestartGameButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1046.0
+offset_top = 609.0
+offset_right = 1133.0
+offset_bottom = 640.0
+text = "Novo Jogo"
+
+[node name="GameStatusTimer" type="Timer" parent="."]
