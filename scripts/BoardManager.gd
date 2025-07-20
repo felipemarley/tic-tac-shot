@@ -10,77 +10,60 @@ signal ai_cell_selected(position: Vector2i)
 
 @export var grid_size: int = 3
 @export var arena_scene: PackedScene = preload("res://scene/level.tscn")
-@export var player_faction: String = "O"
-@export var ai_faction: String = "X"
-@export var first_turn: String = "ai"
+@export var player_faction: String = Global.player_symbol
+@export var ai_faction: String = Global.ai_symbol
 
-var board = []
 var current_arena: Node3D = null
 var game_active: bool = true
 var current_battle_position: Vector2i = Vector2i(-1, -1)
-var player_turn: bool = true
 var board_visible: bool = true
 
 func _ready():
-	initialize_board()
-	player_turn = (first_turn == "player")
+	Global.board_size = grid_size
+	Global.initialize_board()
+	
+	# Define o turno atual como o que está na variável global
+	var player_turn = (Global.turn == "player")
 	turn_changed.emit(player_turn)
-	if !player_turn:
+	if not player_turn:
 		call_deferred("start_ai_turn")
-
-func initialize_board():
-	board = []
-	for i in range(grid_size):
-		var row = []
-		for j in range(grid_size):
-			row.append({
-				"owner": null,
-				"position": Vector2i(i, j),
-				"completed": false
-			})
-		board.append(row)
 
 func set_board_visibility(visible: bool):
 	if board_visible == visible:
 		return
-	
 	board_visible = visible
 	board_visibility_changed.emit(visible)
 
 func start_battle(cell_position: Vector2i):
-	if not game_active or !player_turn:
+	if not game_active or Global.turn != "player":
 		return
 
-	if cell_position.x < 0 or cell_position.y < 0 or cell_position.x >= grid_size or cell_position.y >= grid_size:
-		push_error("Invalid position: ", cell_position)
-		return
-	
-	var cell = board[cell_position.x][cell_position.y]
-	if cell["owner"] != null:
+	var cell_id = "%d,%d" % [cell_position.x, cell_position.y]
+	if Global.board_state[cell_id] != null:
 		push_warning("Cell already conquered")
 		return
-	
+
 	current_battle_position = cell_position
 	set_board_visibility(false)
-	load_arena(true)  # Player attacks
+	load_arena(true)
 
 func load_arena(is_player_attacking: bool):
 	if current_arena:
 		current_arena.queue_free()
 		await current_arena.tree_exited
-	
+
 	current_arena = arena_scene.instantiate()
 	add_child(current_arena)
-	
+
 	var battle_type = "attack" if is_player_attacking else "defense"
 	arena_loaded.emit(current_arena, battle_type)
 
 	if current_arena.has_method("initialize_arena"):
 		current_arena.initialize_arena(
 			player_faction if is_player_attacking else ai_faction,
-			"attack"
+			battle_type
 		)
-	
+
 	if current_arena.has_signal("arena_completed"):
 		if current_arena.arena_completed.is_connected(_on_arena_completed):
 			current_arena.arena_completed.disconnect(_on_arena_completed)
@@ -88,14 +71,15 @@ func load_arena(is_player_attacking: bool):
 
 func _on_arena_completed(victory: bool):
 	set_board_visibility(true)
-	
-	if current_battle_position.x < 0 or current_battle_position.y < 0:
-		push_error("Invalid battle position")
+
+	if current_battle_position.x < 0:
 		return
-	
-	var winner = player_faction if (victory == player_turn) else ai_faction
-	board[current_battle_position.x][current_battle_position.y]["owner"] = winner
-	cell_conquered.emit(current_battle_position, winner)
+
+	var winner = player_faction if (victory == (Global.turn == "player")) else ai_faction
+	var cell_id = "%d,%d" % [current_battle_position.x, current_battle_position.y]
+	Global.board_state[cell_id] = winner
+
+	cell_conquered.emit(current_battle_position, winner, !victory and (Global.turn == "player"))
 
 	check_game_over()
 
@@ -105,129 +89,106 @@ func _on_arena_completed(victory: bool):
 	current_battle_position = Vector2i(-1, -1)
 
 func switch_turns():
-	player_turn = !player_turn
+	Global.turn = "ai" if Global.turn == "player" else "player"
+	var player_turn = (Global.turn == "player")
 	turn_changed.emit(player_turn)
-
-	if !player_turn and game_active:
+	if not player_turn and game_active:
 		start_ai_turn()
 
 func start_ai_turn():
 	var best_move = find_best_move()
-	if best_move.x >= 0 and best_move.y >= 0:
+	if best_move.x >= 0:
 		current_battle_position = best_move
-		ai_cell_selected.emit(best_move)  # Animação será chamada pelo BoardUI
+		ai_cell_selected.emit(best_move)
 	else:
-		push_error("AI couldn't find valid move")
 		check_game_over()
 
-# NOVA FUNÇÃO: chamada pelo BoardUI após a animação
 func on_ai_cell_animation_finished(pos: Vector2i):
 	set_board_visibility(false)
-	load_arena(false)  # AI ataca, jogador defende
+	load_arena(false)
 
 func find_best_move() -> Vector2i:
-	var empty_cells = get_empty_cells()
-	if empty_cells.size() == 0:
+	var empty_cells = []
+	for row in range(Global.board_size):
+		for col in range(Global.board_size):
+			var id = "%d,%d" % [row, col]
+			if Global.board_state[id] == null:
+				empty_cells.append(Vector2i(row, col))
+
+	if empty_cells.is_empty():
 		return Vector2i(-1, -1)
-
-	for cell in empty_cells:
-		if would_complete_line(cell, ai_faction):
-			return cell
-
-	for cell in empty_cells:
-		if would_complete_line(cell, player_faction):
-			return cell
-
-	if is_board_empty():
-		var center = Vector2i(grid_size / 2, grid_size / 2)
-		if board[center.x][center.y]["owner"] == null:
-			return center
 
 	return empty_cells.pick_random()
 
-func get_empty_cells() -> Array:
-	var empty_cells = []
-	for i in range(grid_size):
-		for j in range(grid_size):
-			if board[i][j]["owner"] == null:
-				empty_cells.append(Vector2i(i, j))
-	return empty_cells
-
-func is_board_empty() -> bool:
-	for i in range(grid_size):
-		for j in range(grid_size):
-			if board[i][j]["owner"] != null:
-				return false
-	return true
-
-func would_complete_line(position: Vector2i, faction: String) -> bool:
-	var temp_board = []
-	for i in range(grid_size):
-		var row = []
-		for j in range(grid_size):
-			row.append(board[i][j].duplicate())
-		temp_board.append(row)
-	temp_board[position.x][position.y]["owner"] = faction
-	return check_winner(temp_board) != ""
-
 func check_game_over():
-	var winner = check_winner(board)
-	if winner:
+	var winner = check_winner()
+	if winner != "":
+		game_active = false
 		game_over.emit(winner)
-		game_active = false
 	elif is_board_full():
-		game_over.emit("draw")
 		game_active = false
+		game_over.emit("draw")
 
-func check_winner(board_state) -> String:
-	for i in range(grid_size):
-		var row_winner = board_state[i][0]["owner"]
-		if row_winner != null and board_state[i].all(func(cell): return cell["owner"] == row_winner):
-			return row_winner
-	
-	for j in range(grid_size):
-		var col_winner = board_state[0][j]["owner"]
-		if col_winner != null:
+func check_winner() -> String:
+	var size = Global.board_size
+	var s = Global.board_state
+
+	# Linhas
+	for row in range(size):
+		var first = s["%d,0" % row]
+		if first != null:
 			var win = true
-			for i in range(1, grid_size):
-				if board_state[i][j]["owner"] != col_winner:
+			for col in range(1, size):
+				if s["%d,%d" % [row, col]] != first:
 					win = false
 					break
-			if win:
-				return col_winner
+			if win: return first
 
-	var diag1_winner = board_state[0][0]["owner"]
-	if diag1_winner != null:
+	# Colunas
+	for col in range(size):
+		var first = s["0,%d" % col]
+		if first != null:
+			var win = true
+			for row in range(1, size):
+				if s["%d,%d" % [row, col]] != first:
+					win = false
+					break
+			if win: return first
+
+	# Diagonal 1
+	var diag1 = s["0,0"]
+	if diag1 != null:
 		var win = true
-		for i in range(1, grid_size):
-			if board_state[i][i]["owner"] != diag1_winner:
+		for i in range(1, size):
+			if s["%d,%d" % [i, i]] != diag1:
 				win = false
 				break
-		if win: return diag1_winner
+		if win: return diag1
 
-	var diag2_winner = board_state[0][grid_size - 1]["owner"]
-	if diag2_winner != null:
+	# Diagonal 2
+	var diag2 = s["0,%d" % (size - 1)]
+	if diag2 != null:
 		var win = true
-		for i in range(1, grid_size):
-			if board_state[i][grid_size - 1 - i]["owner"] != diag2_winner:
+		for i in range(1, size):
+			if s["%d,%d" % [i, size - 1 - i]] != diag2:
 				win = false
 				break
-		if win: return diag2_winner
+		if win: return diag2
 
 	return ""
 
 func is_board_full() -> bool:
-	for i in range(grid_size):
-		for j in range(grid_size):
-			if board[i][j]["owner"] == null:
-				return false
+	for value in Global.board_state.values():
+		if value == null:
+			return false
 	return true
 
 func reset_game():
 	game_active = true
-	player_turn = (first_turn == "player")
+	Global.turn = "player"  # ou "ai", escolha quem começa
+	var player_turn = (Global.turn == "player")
 	turn_changed.emit(player_turn)
-	initialize_board()
+	Global.initialize_board()
 	current_battle_position = Vector2i(-1, -1)
 
 	if current_arena:
@@ -236,17 +197,13 @@ func reset_game():
 
 	set_board_visibility(true)
 
-	if !player_turn:
+	if not player_turn:
 		call_deferred("start_ai_turn")
-		
-func player_lost_battle():
-	# Marca a célula atual com a vitória da IA
-	if current_battle_position.x < 0 or current_battle_position.y < 0:
-		push_error("Posição inválida para marcar derrota do jogador")
-		return
 
-	board[current_battle_position.x][current_battle_position.y]["owner"] = ai_faction
-	cell_conquered.emit(current_battle_position, ai_faction)
+func player_lost_battle():
+	var cell_id = "%d,%d" % [current_battle_position.x, current_battle_position.y]
+	Global.board_state[cell_id] = ai_faction
+	cell_conquered.emit(current_battle_position, ai_faction, true)
 
 	check_game_over()
 	if game_active:
