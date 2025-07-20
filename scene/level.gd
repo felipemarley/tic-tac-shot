@@ -22,45 +22,18 @@ func _ready() -> void:
 	GameManager._start_new_game()
 
 func _on_start_fps_level() -> void:
-	# Esconda o mouse e capture-o para a visão FPS
+	# Esconde o mouse e captura-o para a visão FPS
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
-	# Certifique-se de que o dun_gen está limpo antes de gerar um novo
+	# Garante que o dun_gen está limpo e reconecta o sinal
 	if dun_gen.is_connected("dungeon_ready", Callable(self, "on_dungeon_ready")):
 		dun_gen.dungeon_ready.disconnect(on_dungeon_ready)
 	dun_gen.dungeon_ready.connect(on_dungeon_ready)
-	dun_gen.generate()
 
 	_clear_all_enemies()
 
-# Função para ocultar o mundo FPS
-func _hide_fps_world() -> void:
 	dun_gen.visible = false
-	if is_instance_valid(player_instance):
-		player_instance.visible = false
-		player_instance.set_physics_process(false)
-
-	# Garante que os inimigos sejam removidos ao ocultar o mundo FPS
-	_clear_all_enemies()
-
-	# Oculte todos os inimigos existentes
-	for enemy in get_tree().get_nodes_in_group("enemies"):
-		if is_instance_valid(enemy):
-			enemy.visible = false
-			enemy.set_physics_process(false) # Desativa o processamento de física dos inimigos
-
-# Função para mostrar o mundo FPS
-func _show_fps_world() -> void:
-	dun_gen.visible = true
-
-# Função para reagir às mudanças de estado do GameManager
-func _on_game_state_changed_from_manager(new_state: GameManager.GameState) -> void:
-	match new_state:
-		GameManager.GameState.FPS_PHASE:
-			_show_fps_world()
-		GameManager.GameState.TIC_TAC_TOE_TURN, GameManager.GameState.ROUND_END, GameManager.GameState.GAME_OVER:
-			_hide_fps_world()
-
+	dun_gen.generate()
 
 func on_dungeon_ready() -> void:
 	print("Level: Dungeon pronto, spawnando player e inimigos.") # Para depuração
@@ -75,7 +48,6 @@ func on_dungeon_ready() -> void:
 		add_child(player_instance)
 		# Se você não quer que o player seja recriado, mova-o em vez de instanciar
 	player_instance.global_position = spawn
-	add_child(player_instance)
 
 	player_instance.visible = true
 	player_instance.set_physics_process(true)
@@ -86,6 +58,8 @@ func on_dungeon_ready() -> void:
 
 	enemy_spawn()
 	dun_gen.grid_map.clear()
+
+	dun_gen.visible = true
 
 	GameManager.player_spawned.emit(player_instance)
 
@@ -106,6 +80,24 @@ func enemy_spawn() -> void:
 				spawned_enemy_count += 1
 
 	enemies_spawned_for_round.emit(spawned_enemy_count)
+
+# Função para ocultar o mundo FPS
+func _hide_fps_world() -> void:
+	dun_gen.visible = false
+	if is_instance_valid(player_instance):
+		player_instance.visible = false
+		player_instance.set_physics_process(false)
+
+	# Garante que os inimigos sejam removidos ao ocultar o mundo FPS
+	_clear_all_enemies()
+
+# Função para reagir às mudanças de estado do GameManager
+func _on_game_state_changed_from_manager(new_state: GameManager.GameState) -> void:
+	match new_state:
+		GameManager.GameState.FPS_PHASE:
+			pass
+		GameManager.GameState.TIC_TAC_TOE_TURN, GameManager.GameState.ROUND_END, GameManager.GameState.GAME_OVER:
+			_hide_fps_world()
 
 # Função para limpar todos os inimigos da cena
 func _clear_all_enemies() -> void:

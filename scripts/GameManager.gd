@@ -124,7 +124,7 @@ func start_new_fps_round(total_enemies: int) -> void:
 
  # Chamado quando o jogador morre
 func player_died() -> void:
-	print("GameManager: Player died in FPS phase. Resetting round.") # Novo print para depuração
+	print("GameManager: Player died in FPS phase. Resetting round.")
 	fps_phase_ended.emit(false)
 	reset_fps_round()
 

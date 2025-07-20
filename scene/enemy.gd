@@ -14,6 +14,9 @@ const MOVE_SPEED : float = 10
 @export var attack_range: float = 0.9 # Distância para o inimigo atacar o player
 var attack_timer: Timer = null # Será inicializado no _ready
 
+const PATH_UPDATE_INTERVAL = 0.2 # Atualizar o caminho 5 vezes por segundo
+var path_update_timer = 0.0
+
 func _ready():
 	if health_component:
 		health_component.died.connect(_on_died)
@@ -29,19 +32,28 @@ func _ready():
 	add_child(attack_timer)
 	attack_timer.one_shot = true # O timer só roda uma vez, depois precisa ser iniciado de novo
 	attack_timer.wait_time = attack_cooldown
-	# attack_timer.timeout.connect(func(): _on_attack_cooldown_finished()) # Conecta ao novo método
 
 
 func _physics_process(delta: float) -> void:
 	if health_component and health_component.is_dead:
 		return
 
-	var direction : Vector3 = Vector3.ZERO
 	if player_ref:
-		navigation.target_position = player_ref.global_position
-		direction = (navigation.get_next_path_position() - global_position).normalized()
-		look_at(player_ref.global_position)
-		velocity = velocity.lerp(direction * MOVE_SPEED, delta * 0.25)
+		# Atualiza o destino do pathfinding apenas no intervalo definido
+		path_update_timer -= delta
+		if path_update_timer <= 0:
+			navigation.target_position = player_ref.global_position
+			path_update_timer = PATH_UPDATE_INTERVAL
+
+		var direction : Vector3 = Vector3.ZERO
+		# Garante que o inimigo tem um caminho para seguir
+		if not navigation.is_navigation_finished(): # Verifica se ainda não chegou ao alvo final
+			direction = (navigation.get_next_path_position() - global_position).normalized()
+			velocity = velocity.lerp(direction * MOVE_SPEED, delta * 0.25)
+		else:
+			velocity = velocity.lerp(Vector3.ZERO, delta * 0.5) # Desacelera se já no alvo
+
+		look_at(player_ref.global_position, Vector3.UP) # rotação apenas em Y
 		move_and_slide()
 
 		if global_position.distance_to(player_ref.global_position) <= attack_range and attack_timer.is_stopped():
@@ -51,12 +63,9 @@ func _physics_process(delta: float) -> void:
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body.name == "Player":
 		player_ref = body
-		# if attack_timer.is_stopped():
-		# 	_deal_damage_to_player()
 
 func _on_area_3d_body_exited(body: Node3D) -> void:
 	if body.name == "Player":
-		# player_ref = null
 		attack_timer.stop()
 
 func _deal_damage_to_player():
@@ -71,7 +80,6 @@ func _deal_damage_to_player():
 
 # Morte
 func _on_died():
-	# print("MORREU")
 	velocity = Vector3.ZERO
 	died_and_killed.emit()
 
