@@ -40,6 +40,10 @@ func _input(event) -> void:
 		rotation_degrees.y -= event.relative.x * MOUSE_SENS
 		pistol.rotation_degrees.y = rotation_degrees.y
 
+	if event.is_action_pressed("cheat_spawn_enemies"):
+		GameManager.teleport_cheat_enemies_in_front(global_position, -global_transform.basis.z) # Passa posição e direção à frente
+
+
 func _physics_process(delta: float) -> void:
 	if health_component and health_component.is_dead:
 		velocity = Vector3.ZERO
