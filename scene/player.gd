@@ -4,6 +4,7 @@ extends CharacterBody3D
 @onready var land_sfx: AudioStreamPlayer3D = $LandingSound
 @onready var health_component = $HealthComponent
 @onready var hud: Control = null
+@onready var board_manager = get_tree().get_root().find_child("BoardManager", true, false)
 
 var footstep_sounds: Array[AudioStream] = []
 
@@ -103,9 +104,10 @@ func _on_died():
 	print("GAME OVER")
 	velocity = Vector3.ZERO
 	set_physics_process(false)
-
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
-	# Reinicia cena
+	if board_manager:
+		board_manager.player_lost_battle()
+
 	await get_tree().create_timer(1.0).timeout
 	get_tree().reload_current_scene()

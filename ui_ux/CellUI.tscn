@@ -1,0 +1,39 @@
+[gd_scene load_steps=2 format=3 uid="uid://df1hs6scs4mub"]
+
+[ext_resource type="Script" uid="uid://dst8tmfwlrkne" path="res://scripts/CellUI.gd" id="1_uo5ln"]
+
+[node name="CellUi" type="Button"]
+custom_minimum_size = Vector2(100, 100)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+script = ExtResource("1_uo5ln")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch_mode = 3

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bhghrhbcmnu10"]
 
-[ext_resource type="Script" uid="uid://c7iwygufo6jgf" path="res://scripts/HUD.gd" id="1_mmka4"]
+[ext_resource type="Script" uid="uid://c7iwygufo6jgf" path="res://scripts/hud.gd" id="1_mmka4"]
 
 [node name="Hud" type="Control"]
 layout_mode = 3
@@ -22,12 +22,17 @@ grow_horizontal = 0
 theme_override_font_sizes/font_size = 30
 text = "HP: 100 / 100"
 
-[node name="KillLabel" type="Label" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 17.0
-offset_top = 8.0
-offset_right = 148.0
-offset_bottom = 48.0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="KillLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
 theme_override_font_sizes/font_size = 29
 text = "Kills: 0"
 vertical_alignment = 1
+
+[node name="EnemiesLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
