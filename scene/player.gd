@@ -16,7 +16,6 @@ var step_timer = 0.0
 var was_on_floor = false
 
 func _ready() -> void:
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	footstep_sounds = [
 		preload("res://scene/st1-footstep-sfx-323053.mp3"),
 		preload("res://ui_ux/sounds/st2-footstep-sfx-323055.mp3"),
@@ -32,6 +31,14 @@ func _ready() -> void:
 		health_component.died.connect(_on_died)
 
 func _input(event) -> void:
+	if GameManager.current_game_state != GameManager.GameState.FPS_PHASE:
+		pistol.visible = false
+		pistol.set_process_mode(Node.PROCESS_MODE_DISABLED)
+		return
+
+	pistol.visible = true
+	pistol.set_process_mode(Node.PROCESS_MODE_ALWAYS)
+
 	if Input.is_key_pressed(KEY_E):
 		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -40,8 +47,17 @@ func _input(event) -> void:
 		rotation_degrees.y -= event.relative.x * MOUSE_SENS
 		pistol.rotation_degrees.y = rotation_degrees.y
 
+	if event.is_action_pressed("cheat_spawn_enemies"):
+		GameManager.teleport_cheat_enemies_in_front(global_position, -global_transform.basis.z) # Passa posição e direção à frente
+
+
 func _physics_process(delta: float) -> void:
 	if health_component and health_component.is_dead:
+		velocity = Vector3.ZERO
+		move_and_slide()
+		return
+
+	if GameManager.current_game_state != GameManager.GameState.FPS_PHASE:
 		velocity = Vector3.ZERO
 		move_and_slide()
 		return
@@ -97,7 +113,6 @@ func _handle_footsteps(delta: float) -> void:
 func take_damage(amount: int):
 	if health_component:
 		health_component.take_damage(amount)
-		print("Player tomou " + str(amount) + " de dano. HP: " + str(health_component.current_hp))
 
 func _on_died():
 	print("GAME OVER")
@@ -106,6 +121,4 @@ func _on_died():
 
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
-	# Reinicia cena
-	await get_tree().create_timer(1.0).timeout
-	get_tree().reload_current_scene()
+	GameManager.player_died()
