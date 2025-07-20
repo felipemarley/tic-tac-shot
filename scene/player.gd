@@ -97,7 +97,7 @@ func _handle_footsteps(delta: float) -> void:
 func take_damage(amount: int):
 	if health_component:
 		health_component.take_damage(amount)
-		print("Player tomou " + str(amount) + " de dano. HP: " + str(health_component.current_hp))
+		# print("Player tomou " + str(amount) + " de dano. HP: " + str(health_component.current_hp))
 
 func _on_died():
 	print("GAME OVER")
@@ -106,6 +106,4 @@ func _on_died():
 
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
-	# Reinicia cena
-	await get_tree().create_timer(1.0).timeout
-	get_tree().reload_current_scene()
+	GameManager.player_died()
