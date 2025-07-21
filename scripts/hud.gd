@@ -227,9 +227,9 @@ func _on_game_state_changed(new_state: GameManager.GameState) -> void:
 			game_status_timer.stop()
 			game_status_label.visible = true
 			if GameManager.check_tic_tac_toe_win(GameManager.PlayerSide.X):
-				game_status_label.text = "VOCÊ VENCEU (X)!"
+				game_status_label.text = "VOCE VENCEU (X)!"
 			elif GameManager.check_tic_tac_toe_win(GameManager.PlayerSide.O):
-				game_status_label.text = "VOCÊ PERDEU! VITORIA DA IA: O!"
+				game_status_label.text = "VOCE PERDEU! VITORIA DA IA: O!"
 			else:
 				game_status_label.text = "EMPATE!"
 			_enable_board_buttons(false)

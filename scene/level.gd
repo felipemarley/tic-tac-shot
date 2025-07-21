@@ -79,7 +79,9 @@ func enemy_spawn() -> void:
 				e.died_and_killed.connect(GameManager.add_kill)
 				spawned_enemy_count += 1
 
+	#enemies_spawned_for_round.emit(spawned_enemy_count-10)
 	enemies_spawned_for_round.emit(spawned_enemy_count)
+
 
 # Função para ocultar o mundo FPS
 func _hide_fps_world() -> void:
