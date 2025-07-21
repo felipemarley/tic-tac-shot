@@ -48,4 +48,5 @@ func enemy_spawn() -> void:
 				e.died_and_killed.connect(GameManager.add_kill)
 				enemy_count += 1
 	
-	GameManager.total_enemies = enemy_count
+	#GameManager.total_enemies = enemy_count
+	GameManager.total_enemies = 2

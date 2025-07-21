@@ -29,4 +29,7 @@ func take_damage(amount: int):
 func die():
 	if is_dead: return
 	is_dead = true
+	Global.victory = Global.ai_symbol
+	
+	print("Vencedor da célula: " + Global.victory)
 	died.emit()

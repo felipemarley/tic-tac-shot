@@ -5,6 +5,8 @@ var board_size = 3
 var player_symbol = "O"
 var ai_symbol = "X"
 var turn = "ai"
+var victory = ""
+var winner = ""
 
 func initialize_board():
 	board_state.clear()

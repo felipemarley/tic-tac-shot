@@ -48,6 +48,7 @@ func start_battle(cell_position: Vector2i):
 	load_arena(true)
 
 func load_arena(is_player_attacking: bool):
+	Global.victory = ""
 	if current_arena:
 		current_arena.queue_free()
 		await current_arena.tree_exited
@@ -70,7 +71,6 @@ func load_arena(is_player_attacking: bool):
 		current_arena.arena_completed.connect(_on_arena_completed)
 
 func _on_arena_completed(victory: bool):
-	set_board_visibility(true)
 
 	if current_battle_position.x < 0:
 		return
@@ -185,7 +185,7 @@ func is_board_full() -> bool:
 
 func reset_game():
 	game_active = true
-	Global.turn = "player"  # ou "ai", escolha quem começa
+	Global.turn = "ai"  # ou "ai", escolha quem começa
 	var player_turn = (Global.turn == "player")
 	turn_changed.emit(player_turn)
 	Global.initialize_board()
@@ -200,13 +200,22 @@ func reset_game():
 	if not player_turn:
 		call_deferred("start_ai_turn")
 
-func player_lost_battle():
+func final_battle():
 	var cell_id = "%d,%d" % [current_battle_position.x, current_battle_position.y]
-	Global.board_state[cell_id] = ai_faction
-	cell_conquered.emit(current_battle_position, ai_faction, true)
+	Global.board_state[cell_id] = Global.victory
+	
+	if Global.victory == Global.ai_symbol:
+		cell_conquered.emit(current_battle_position, Global.ai_symbol, true)
+	if Global.victory == Global.player_symbol:
+		cell_conquered.emit(current_battle_position, Global.player_symbol, false)
+
+	
+	print(Global.board_state)
 
 	check_game_over()
+	
 	if game_active:
+		Global.victory = ""
 		switch_turns()
 
 	current_battle_position = Vector2i(-1, -1)

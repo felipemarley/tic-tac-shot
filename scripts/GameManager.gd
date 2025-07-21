@@ -1,9 +1,15 @@
 extends Node
 
+@onready var board_manager = get_tree().get_root().find_child("BoardManager", true, false)
+@onready var player = get_tree().get_root().find_child("Player", true, false)
+
 signal kill_count_changed(new_count: int)
 signal player_spawned(player: Node)
 signal arena_completed(victory: bool)
 signal enemies_count_updated(total: int, killed: int)  # Novo sinal
+signal win
+
+var is_win = false
 
 var kill_count: int = 0:
 	set(value):
@@ -25,8 +31,10 @@ func _ready():
 func add_kill() -> void:
 	kill_count += 1
 	# Verificação automática se todos os inimigos foram derrotados
-	if kill_count >= total_enemies:
-		report_arena_result(true)
+	if kill_count == total_enemies:
+		win_true()
+		
+		#report_arena_result(true)
 
 func register_enemy(enemy: Node) -> void:
 	if not enemy in enemies_in_arena:
@@ -51,3 +59,11 @@ func reset_arena_counts():
 func reset_all_counts():
 	reset_arena_counts()
 	current_player = null
+
+func win_true():
+	if is_win: return
+	is_win = true
+	Global.victory = Global.player_symbol
+	print("Vencedor da célula: " + Global.victory)
+	win.emit()  
+	

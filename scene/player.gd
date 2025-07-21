@@ -1,10 +1,21 @@
 extends CharacterBody3D
+
+class_name Player
+
 @onready var pistol = $Head/Pistol
 @onready var footsteps_sfx: AudioStreamPlayer3D = $Footsteps
 @onready var land_sfx: AudioStreamPlayer3D = $LandingSound
 @onready var health_component = $HealthComponent
 @onready var hud: Control = null
 @onready var board_manager = get_tree().get_root().find_child("BoardManager", true, false)
+
+@onready var game_manager = get_tree().get_root().find_child("GameManager", true, false)
+
+var win_scene_packed = preload("res://ui_ux/BoardUI.tscn")
+
+#signal messagewin
+#signal messagelost
+
 
 var footstep_sounds: Array[AudioStream] = []
 
@@ -31,6 +42,9 @@ func _ready() -> void:
 
 	if health_component:
 		health_component.died.connect(_on_died)
+	
+	if game_manager:
+		game_manager.win.connect(_on_win)
 
 func _input(event) -> void:
 	if Input.is_key_pressed(KEY_E):
@@ -43,6 +57,10 @@ func _input(event) -> void:
 
 func _physics_process(delta: float) -> void:
 	if health_component and health_component.is_dead:
+		velocity = Vector3.ZERO
+		move_and_slide()
+		return
+	if game_manager and game_manager.is_win:
 		velocity = Vector3.ZERO
 		move_and_slide()
 		return
@@ -101,13 +119,38 @@ func take_damage(amount: int):
 		print("Player tomou " + str(amount) + " de dano. HP: " + str(health_component.current_hp))
 
 func _on_died():
-	print("GAME OVER")
+	print("GAME OVER - perdeu")
+	
 	velocity = Vector3.ZERO
 	set_physics_process(false)
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 	if board_manager:
-		board_manager.player_lost_battle()
+		board_manager.final_battle()
+		
+	var lost_message = get_tree().get_root().find_child("lost-message", true, false)
+	if lost_message:
+		lost_message._show_lost_message()  # chama diretamente
 
+	await get_tree().create_timer(1.0).timeout
+	get_tree().reload_current_scene()
+	
+func _on_win():
+	print("GAME OVER - Venceu")
+
+	velocity = Vector3.ZERO
+	set_physics_process(false)
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+	if board_manager:
+		board_manager.final_battle()
+	
+	# Em vez de emitir o sinal e esperar alguém escutar...
+	var win_message = get_tree().get_root().find_child("win-message", true, false)
+	if win_message:
+		win_message._show_win_message()  # chama diretamente
+
+	#messagewin.emit()
+		
 	await get_tree().create_timer(1.0).timeout
 	get_tree().reload_current_scene()

@@ -17,6 +17,7 @@ func setup_board():
 	var container = $MarginContainer/GridContainer
 	container.columns = Global.board_size
 
+	# Limpa o tabuleiro antigo
 	for child in container.get_children():
 		child.queue_free()
 	cells.clear()
@@ -30,6 +31,14 @@ func setup_board():
 			container.add_child(cell)
 			cells[pos] = cell
 			cell.name = "Cell_%d_%d" % [i, j]
+
+			# Preenche a célula com valor existente no estado global, se houver
+			var key = "%d,%d" % [i, j]
+			if Global.board_state.has(key):
+				var owner = Global.board_state[key]
+				if owner != null:
+					cell.set_owner(owner)
+
 
 func connect_signals():
 	board_manager_node.cell_conquered.connect(_on_cell_conquered)
@@ -65,6 +74,8 @@ func _on_board_visibility_changed(show: bool):
 func _on_ai_cell_selected(pos: Vector2i):
 	var cell = cells.get(pos)
 	if cell:
+		await get_tree().create_timer(2.0).timeout
+
 		var tween = create_tween()
 		tween.tween_property(cell, "scale", Vector2(0.8, 0.8), 1.0).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 		tween.tween_property(cell, "scale", Vector2(1, 1), 1.0).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
