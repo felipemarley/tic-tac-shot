@@ -20,7 +20,6 @@ var board_visible: bool = true
 
 func _ready():
 	Global.board_size = grid_size
-	Global.initialize_board()
 	
 	# Define o turno atual como o que está na variável global
 	var player_turn = (Global.turn == "player")

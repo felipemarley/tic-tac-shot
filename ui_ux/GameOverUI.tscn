@@ -39,4 +39,8 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Jogar novamente"
 
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 42
+
 [connection signal="pressed" from="Panel/VBoxContainer/Button" to="." method="_on_button_pressed"]

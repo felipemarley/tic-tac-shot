@@ -67,3 +67,7 @@ func win_true():
 	print("Vencedor da célula: " + Global.victory)
 	win.emit()  
 	
+func is_not_win():
+	if !is_win: return
+	is_win = false
+	

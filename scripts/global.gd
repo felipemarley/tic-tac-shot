@@ -8,6 +8,10 @@ var turn = "ai"
 var victory = ""
 var winner = ""
 
+func _ready():
+		Global.initialize_board()
+
+
 func initialize_board():
 	board_state.clear()
 	for row in range(board_size):

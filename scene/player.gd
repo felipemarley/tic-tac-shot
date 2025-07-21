@@ -151,6 +151,7 @@ func _on_win():
 		win_message._show_win_message()  # chama diretamente
 
 	#messagewin.emit()
-		
+	
 	await get_tree().create_timer(1.0).timeout
+	game_manager.is_not_win()
 	get_tree().reload_current_scene()

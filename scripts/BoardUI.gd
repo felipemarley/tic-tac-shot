@@ -32,12 +32,14 @@ func setup_board():
 			cells[pos] = cell
 			cell.name = "Cell_%d_%d" % [i, j]
 
-			# Preenche a célula com valor existente no estado global, se houver
+			# Verifica se já existe um dono da célula no estado global
 			var key = "%d,%d" % [i, j]
 			if Global.board_state.has(key):
 				var owner = Global.board_state[key]
 				if owner != null:
-					cell.set_owner(owner)
+					# Se o dono for "X", foi uma derrota do jogador
+					var player_lost = owner == "X"
+					cell.set_cell_owner(owner, player_lost)
 
 
 func connect_signals():
