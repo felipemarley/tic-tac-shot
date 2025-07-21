@@ -1,6 +1,102 @@
-[gd_scene load_steps=2 format=3 uid="uid://bhghrhbcmnu10"]
+[gd_scene load_steps=16 format=3 uid="uid://bhghrhbcmnu10"]
 
 [ext_resource type="Script" uid="uid://c7iwygufo6jgf" path="res://scripts/hud.gd" id="1_mmka4"]
+[ext_resource type="FontFile" uid="uid://d24u7vsgokjh6" path="res://assest/font/doom/DooM.ttf" id="2_5nt5s"]
+[ext_resource type="Texture2D" uid="uid://gtt8ixyjm83f" path="res://assest/hud/SNES - DOOM - HUD.png" id="3_4nxdm"]
+[ext_resource type="Texture2D" uid="uid://nvcknocohql5" path="res://assest/hud/SNES_-_DOOM_-_HUD-removebg-preview.png" id="4_pgw44"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yx4hk"]
+atlas = ExtResource("4_pgw44")
+region = Rect2(71, 185, 34, 37)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ldol0"]
+atlas = ExtResource("4_pgw44")
+region = Rect2(105, 185, 34, 37)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0qwpj"]
+atlas = ExtResource("4_pgw44")
+region = Rect2(139, 185, 34, 37)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yxe7t"]
+atlas = ExtResource("4_pgw44")
+region = Rect2(71, 114, 34, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0twk8"]
+atlas = ExtResource("4_pgw44")
+region = Rect2(105, 114, 34, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wrc8y"]
+atlas = ExtResource("4_pgw44")
+region = Rect2(139, 114, 34, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ys10w"]
+atlas = ExtResource("4_pgw44")
+region = Rect2(105, 222, 32, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s4g46"]
+atlas = ExtResource("4_pgw44")
+region = Rect2(71, 42, 32, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7w78f"]
+atlas = ExtResource("4_pgw44")
+region = Rect2(105, 42, 32, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hyi5t"]
+atlas = ExtResource("4_pgw44")
+region = Rect2(139, 42, 32, 40)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_qfeqy"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yx4hk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ldol0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0qwpj")
+}],
+"loop": true,
+"name": &"10perc",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yxe7t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0twk8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wrc8y")
+}],
+"loop": true,
+"name": &"50perc",
+"speed": 0.8
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ys10w")
+}],
+"loop": true,
+"name": &"die",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s4g46")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7w78f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hyi5t")
+}],
+"loop": true,
+"name": &"normal",
+"speed": 5.0
+}]
 
 [node name="Hud" type="Control"]
 layout_mode = 3
@@ -11,25 +107,93 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_mmka4")
 
-[node name="Labels" type="Node" parent="."]
+[node name="HudLayout" type="Node" parent="."]
 
-[node name="HpLabel" type="Label" parent="Labels"]
+[node name="hud" type="Sprite2D" parent="HudLayout"]
+position = Vector2(586, 601)
+scale = Vector2(3.27888, 2.89063)
+texture = ExtResource("3_4nxdm")
+region_enabled = true
+region_rect = Rect2(9, 10, 216, 32)
+
+[node name="hud2" type="Sprite2D" parent="HudLayout"]
+position = Vector2(859, 601.102)
+scale = Vector2(3.27888, 4.08168)
+texture = ExtResource("3_4nxdm")
+region_enabled = true
+region_rect = Rect2(175.682, 10.3191, 48.8927, 22.4808)
+
+[node name="hud3" type="Sprite2D" parent="HudLayout"]
+position = Vector2(478.653, 599.592)
+scale = Vector2(3.30611, 4.44084)
+texture = ExtResource("3_4nxdm")
+region_enabled = true
+region_rect = Rect2(59.6795, 10.908, 48.5619, 20.3241)
+
+[node name="arma" type="Sprite2D" parent="HudLayout"]
+position = Vector2(313.663, 601.269)
+scale = Vector2(4.31393, 5.09139)
+texture = ExtResource("3_4nxdm")
+region_enabled = true
+region_rect = Rect2(179.543, 69.2371, 34.6637, 16.6778)
+
+[node name="HpLabel" type="Label" parent="HudLayout"]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -187.0
-offset_bottom = 42.0
+offset_left = -724.0
+offset_top = 567.0
+offset_right = -613.0
+offset_bottom = 605.0
 grow_horizontal = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_5nt5s")
 theme_override_font_sizes/font_size = 30
-text = "HP: 100 / 100"
+text = "100%"
+
+[node name="PlayerAnim" type="AnimatedSprite2D" parent="HudLayout"]
+position = Vector2(608, 603)
+scale = Vector2(2, 2.02632)
+sprite_frames = SubResource("SpriteFrames_qfeqy")
+animation = &"normal"
+autoplay = "normal"
+
+[node name="Labels" type="Node" parent="."]
+
+[node name="HealthLabel" type="Label" parent="Labels"]
+offset_left = 406.0
+offset_top = 604.0
+offset_right = 576.0
+offset_bottom = 641.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_5nt5s")
+theme_override_font_sizes/font_size = 25
+text = "HEALTH"
+vertical_alignment = 1
 
 [node name="KillLabel" type="Label" parent="Labels"]
-offset_left = 17.0
-offset_top = 8.0
-offset_right = 148.0
-offset_bottom = 48.0
+offset_left = 785.0
+offset_top = 561.0
+offset_right = 934.0
+offset_bottom = 603.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_5nt5s")
 theme_override_font_sizes/font_size = 29
-text = "Kills: 0"
+text = "0/0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="KillLabel2" type="Label" parent="Labels"]
+offset_left = 797.0
+offset_top = 602.0
+offset_right = 925.0
+offset_bottom = 639.0
+theme_override_colors/font_color = Color(0.982343, 0.982342, 0.982342, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_5nt5s")
+theme_override_font_sizes/font_size = 29
+text = "KILLS"
 vertical_alignment = 1
 
 [node name="GameStatusLabel" type="Label" parent="Labels"]
@@ -37,6 +201,7 @@ offset_left = 371.0
 offset_top = 122.0
 offset_right = 679.0
 offset_bottom = 145.0
+theme_override_fonts/font = ExtResource("2_5nt5s")
 text = "Tic-Tac-Shot"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -46,9 +211,9 @@ offset_left = 378.0
 offset_top = 153.0
 offset_right = 686.0
 offset_bottom = 176.0
+theme_override_fonts/font = ExtResource("2_5nt5s")
 
 [node name="TicTacToeBoardContainer" type="PanelContainer" parent="."]
-layout_mode = 0
 offset_left = 375.0
 offset_top = 181.0
 offset_right = 683.0

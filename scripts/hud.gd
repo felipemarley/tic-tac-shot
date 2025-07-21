@@ -1,7 +1,16 @@
 extends Control
 
-@onready var hp_label: Label = $Labels/HpLabel
+@onready var hp_label: Label = $HudLayout/HpLabel
 @onready var kill_label: Label = $Labels/KillLabel
+
+@onready var hud: Sprite2D = $HudLayout/hud
+@onready var hud2: Sprite2D = $HudLayout/hud2
+@onready var hud3: Sprite2D = $HudLayout/hud3
+@onready var arma: Sprite2D = $HudLayout/arma
+@onready var player_anim: AnimatedSprite2D = $HudLayout/PlayerAnim
+@onready var health_label: Label = $Labels/HealthLabel
+@onready var kill_label2: Label = $Labels/KillLabel2
+
 
 # Referências para os elementos do tabuleiro
 @onready var tic_tac_toe_board_container: Control = $TicTacToeBoardContainer # O PanelContainer que contém o tabuleiro
@@ -50,7 +59,7 @@ func update_kill_count(current_kills: int):
 	if kill_label:
 		var total_enemies_in_round = GameManager.enemies_in_current_round
 		if total_enemies_in_round > 0:
-			kill_label.text = "Kills: " + str(current_kills) + " / " + str(total_enemies_in_round)
+			kill_label.text = str(current_kills) + " / " + str(total_enemies_in_round)
 		else:
 			kill_label.text = "Kills: " + str(current_kills)
 
@@ -76,19 +85,25 @@ func _on_player_health_changed(new_hp: int):
 
 	# Exibir vida como fração (ex: 70/100)
 	var max_hp = player_health_component.max_hp
-	hp_label.text = "HP: " + str(new_hp) + " / " + str(max_hp)
+	#hp_label.text = "HP: " + str(new_hp) + " / " + str(max_hp)
 	var hp_percentage = float(new_hp) / max_hp
+	hp_label.text =  str(new_hp) + "%" 
 
 	# Colore barra de HP
 	if new_hp <= 0:
 		hp_label.modulate = Color("red") # Vermelho quando morto
 		hp_label.text = "GAME OVER" # Mensagem de Game Over
+		player_anim.play("die")
 	elif hp_percentage <= 0.20: # Abaixo ou igual a 20%
 		hp_label.modulate = Color("red") # Vermelho
+		player_anim.play("10perc")
 	elif hp_percentage <= 0.50: # Abaixo ou igual a 50%
 		hp_label.modulate = Color("yellow") # Amarelo
+		player_anim.play("50perc")
 	else: # Acima de 50%
 		hp_label.modulate = Color("green") # Verde
+		player_anim.play("normal")
+
 
 
 # Chamado quando um botão de célula do tabuleiro é pressionado
@@ -136,16 +151,30 @@ func _on_game_state_changed(new_state: GameManager.GameState) -> void:
 			hp_label.visible = false
 			kill_label.visible = false
 			turn_label.visible = false
+			hud.visible = false
+			hud2.visible = false
+			hud3.visible = false 
+			arma.visible = false
+			player_anim.visible = false
+			health_label.visible = false
+			kill_label2.visible = false
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 		GameManager.GameState.TIC_TAC_TOE_TURN:
 			tic_tac_toe_board_container.visible = true
-			game_status_label.text = "Selecione uma célula para conquistar:"
+			game_status_label.text = "Selecione uma celula para conquistar:"
 			game_status_timer.stop()
 			restart_game_button.visible = false
 			hp_label.visible = false
 			kill_label.visible = false
 			turn_label.visible = true
+			hud.visible = false
+			hud2.visible = false
+			hud3.visible = false 
+			arma.visible = false
+			player_anim.visible = false
+			health_label.visible = false
+			kill_label2.visible = false
 			_enable_board_buttons(GameManager.current_player_side == GameManager.PlayerSide.X)
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE # Mouse visível para interagir com o tabuleiro
 
@@ -157,6 +186,13 @@ func _on_game_state_changed(new_state: GameManager.GameState) -> void:
 			hp_label.visible = true
 			kill_label.visible = true
 			turn_label.visible = false
+			hud.visible = true
+			hud2.visible = true
+			hud3.visible = true 
+			arma.visible = true
+			player_anim.visible = true
+			health_label.visible = true
+			kill_label2.visible = true
 
 		GameManager.GameState.ROUND_END:
 			tic_tac_toe_board_container.visible = false
@@ -166,6 +202,13 @@ func _on_game_state_changed(new_state: GameManager.GameState) -> void:
 			hp_label.visible = true
 			kill_label.visible = true
 			turn_label.visible = false
+			hud.visible = true
+			hud2.visible = true
+			hud3.visible = true 
+			arma.visible = true
+			player_anim.visible = true
+			health_label.visible = true
+			kill_label2.visible = true
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 		GameManager.GameState.GAME_OVER:
@@ -174,12 +217,19 @@ func _on_game_state_changed(new_state: GameManager.GameState) -> void:
 			hp_label.visible = false
 			kill_label.visible = false
 			turn_label.visible = false
+			hud.visible = false
+			hud2.visible = false
+			hud3.visible = false 
+			arma.visible = false
+			player_anim.visible = false
+			health_label.visible = false
+			kill_label2.visible = false
 			game_status_timer.stop()
 			game_status_label.visible = true
 			if GameManager.check_tic_tac_toe_win(GameManager.PlayerSide.X):
 				game_status_label.text = "VOCÊ VENCEU (X)!"
 			elif GameManager.check_tic_tac_toe_win(GameManager.PlayerSide.O):
-				game_status_label.text = "VOCÊ PERDEU! VITÓRIA DA IA: O!"
+				game_status_label.text = "VOCÊ PERDEU! VITORIA DA IA: O!"
 			else:
 				game_status_label.text = "EMPATE!"
 			_enable_board_buttons(false)
