@@ -1,9 +1,27 @@
-[gd_scene load_steps=6 format=3 uid="uid://e1w0n8q008ub"]
+[gd_scene load_steps=9 format=3 uid="uid://e1w0n8q008ub"]
 
 [ext_resource type="Script" uid="uid://br2ijnxbj6ovr" path="res://scene/player.gd" id="1_hjaqi"]
 [ext_resource type="PackedScene" uid="uid://bcoqs5sdfav7a" path="res://ui_ux/pistol.tscn" id="1_xo3ru"]
 [ext_resource type="Script" uid="uid://ca72tsi8ai8g4" path="res://scripts/HealthComponent.gd" id="2_ct4mp"]
 [ext_resource type="AudioStream" uid="uid://buwdx34sepcvq" path="res://ui_ux/sounds/land2-43790.mp3" id="3_fvtld"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ct4mp"]
+sky_top_color = Color(0.996595, 0.737123, 0.737277, 1)
+sky_horizon_color = Color(0.89551, 0.771957, 0.761206, 1)
+ground_bottom_color = Color(0.226731, 0.157521, 0.111839, 1)
+ground_horizon_color = Color(0.732396, 0.513642, 0.497662, 1)
+energy_multiplier = 1.75
+
+[sub_resource type="Sky" id="Sky_s4jxa"]
+sky_material = SubResource("ProceduralSkyMaterial_ct4mp")
+
+[sub_resource type="Environment" id="Environment_oh5ij"]
+background_mode = 2
+sky = SubResource("Sky_s4jxa")
+tonemap_mode = 2
+glow_enabled = true
+glow_intensity = 0.21
+glow_strength = 0.71
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hjaqi"]
 radius = 0.25
@@ -12,6 +30,15 @@ radius = 0.25
 visible = false
 collision_mask = 2
 script = ExtResource("1_hjaqi")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_oh5ij")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.95424, -0.2988, 0.0120011, 0, 0.0401318, 0.999194, -0.299041, 0.953472, -0.0382954, 0, 0, 0)
+light_color = Color(0.937077, 0.33202, 0.251239, 1)
+light_energy = 2.75
+shadow_enabled = true
 
 [node name="HealthComponent" type="Node" parent="."]
 script = ExtResource("2_ct4mp")
