@@ -1,17 +1,24 @@
-[gd_scene load_steps=3 format=3 uid="uid://cpnkoy7e432s8"]
+[gd_scene load_steps=6 format=3 uid="uid://cpnkoy7e432s8"]
 
 [ext_resource type="Script" uid="uid://dwyk54dyfdl4d" path="res://scripts/pause_menu.gd" id="1_3mybc"]
 [ext_resource type="Theme" uid="uid://mbsg4xqnedxi" path="res://assest/themes/FlatUI4/kenneyUI-red.tres" id="1_57h85"]
+[ext_resource type="Shader" uid="uid://co1i3pm4tkekn" path="res://scene/PauseMenu.gdshader" id="2_40tpd"]
+[ext_resource type="PackedScene" uid="uid://b8mdst0n7oq5k" path="res://scene/OptionsMenu.tscn" id="3_76k2e"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tshm5"]
+shader = ExtResource("2_40tpd")
+shader_parameter/amount = 1.0
 
 [node name="PauseMenu" type="CanvasLayer"]
 layer = 11
 script = ExtResource("1_3mybc")
 
 [node name="ColorRect" type="ColorRect" parent="."]
-offset_left = -1.0
-offset_top = -3.0
-offset_right = 1151.0
-offset_bottom = 649.0
+material = SubResource("ShaderMaterial_tshm5")
+offset_left = -962.0
+offset_top = -535.0
+offset_right = 2101.0
+offset_bottom = 1260.0
 color = Color(0, 0, 0, 0.490196)
 
 [node name="Panel" type="Panel" parent="."]
@@ -71,6 +78,8 @@ layout_mode = 2
 mouse_default_cursor_shape = 2
 theme = ExtResource("1_57h85")
 text = "Sair"
+
+[node name="OptionsMenu" parent="." instance=ExtResource("3_76k2e")]
 
 [connection signal="pressed" from="Panel/VBoxContainer/Voltar" to="." method="_on_voltar_pressed"]
 [connection signal="pressed" from="Panel/VBoxContainer/Opções" to="." method="_on_opções_pressed"]

@@ -1,0 +1,127 @@
+[gd_scene load_steps=5 format=3 uid="uid://b8mdst0n7oq5k"]
+
+[ext_resource type="Theme" uid="uid://mbsg4xqnedxi" path="res://assest/themes/FlatUI4/kenneyUI-red.tres" id="1_7rmqv"]
+[ext_resource type="Script" uid="uid://xagsqsul6v12" path="res://scripts/options_menu-2.gd" id="1_n6pme"]
+[ext_resource type="FontFile" uid="uid://jtgco7pl5ab8" path="res://assest/themes/FlatUI4/kenvector_future.ttf" id="1_smk7u"]
+[ext_resource type="Script" uid="uid://dldyh584pevwy" path="res://scripts/options_menu.gd" id="3_ukmh3"]
+
+[node name="OptionsMenu" type="CanvasLayer"]
+layer = 11
+visible = false
+script = ExtResource("1_n6pme")
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -130.0
+offset_top = -200.0
+offset_right = 130.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.803922, 0.984314, 0.117647, 0.862745)
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -75.5
+offset_top = -66.0
+offset_right = 75.5
+offset_bottom = 66.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer2/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_smk7u")
+text = "OPTIONS"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Panel/VBoxContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_stretch_ratio = 0.0
+theme_override_constants/separation = 22
+
+[node name="volume" type="Label" parent="Panel/VBoxContainer2/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_smk7u")
+text = "Volume"
+
+[node name="HSDX" type="HSlider" parent="Panel/VBoxContainer2/VBoxContainer"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme = ExtResource("1_7rmqv")
+step = 0.05
+value = 1.0
+script = ExtResource("3_ukmh3")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer2/VBoxContainer"]
+layout_mode = 2
+
+[node name="mute" type="Label" parent="Panel/VBoxContainer2/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_smk7u")
+text = "MUTE"
+
+[node name="CheckBox" type="CheckBox" parent="Panel/VBoxContainer2/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_7rmqv")
+
+[node name="resolution" type="Label" parent="Panel/VBoxContainer2/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_smk7u")
+text = "Resolution"
+
+[node name="OptionButton" type="OptionButton" parent="Panel/VBoxContainer2/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme = ExtResource("1_7rmqv")
+selected = 2
+item_count = 3
+popup/item_0/text = "1928x1080"
+popup/item_0/id = 0
+popup/item_1/text = "1600x1900"
+popup/item_1/id = 1
+popup/item_2/text = "1280x720"
+popup/item_2/id = 2
+
+[node name="HSeparator2" type="HSeparator" parent="Panel/VBoxContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+size_flags_stretch_ratio = 0.0
+theme_override_constants/separation = 22
+
+[node name="Button" type="Button" parent="Panel/VBoxContainer2/VBoxContainer"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme = ExtResource("1_7rmqv")
+text = "BACK"
+
+[connection signal="value_changed" from="Panel/VBoxContainer2/VBoxContainer/HSDX" to="." method="_on_hsdx_value_changed"]
+[connection signal="toggled" from="Panel/VBoxContainer2/VBoxContainer/HBoxContainer/CheckBox" to="." method="_on_check_box_toggled"]
+[connection signal="item_selected" from="Panel/VBoxContainer2/VBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]
+[connection signal="pressed" from="Panel/VBoxContainer2/VBoxContainer/Button" to="." method="_on_button_pressed"]

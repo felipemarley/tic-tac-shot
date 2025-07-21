@@ -65,4 +65,4 @@ bus = &"Footsteps"
 stream = ExtResource("3_fvtld")
 attenuation_model = 1
 pitch_scale = 1.8
-bus = &"Land"
+bus = &"SDX"

@@ -1,12 +1,12 @@
 extends CanvasLayer
 
 @onready var hud_main = $".."
-
+@onready var options = $OptionsMenu
 func _on_voltar_pressed() -> void:
 	hud_main.pauseMenu()
 
 func _on_opções_pressed() -> void:
-	pass # Replace with function body.
+	options.visible = true
 
 
 func _on_sair_pressed() -> void:

@@ -145,5 +145,6 @@ libraries = {
 [node name="Shoot" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_3djli")
 volume_db = -7.0
+bus = &"SDX"
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
