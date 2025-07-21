@@ -59,7 +59,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"10perc",
-"speed": 5.0
+"speed": 0.8
 }, {
 "frames": [{
 "duration": 1.0,
@@ -81,7 +81,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"die",
-"speed": 5.0
+"speed": 0.8
 }, {
 "frames": [{
 "duration": 1.0,
@@ -95,10 +95,11 @@ animations = [{
 }],
 "loop": true,
 "name": &"normal",
-"speed": 5.0
+"speed": 0.8
 }]
 
 [node name="Hud" type="Control"]
+z_index = 1
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -107,37 +108,40 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_mmka4")
 
-[node name="HudLayout" type="Node" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 10
 
-[node name="hud" type="Sprite2D" parent="HudLayout"]
-position = Vector2(586, 601)
-scale = Vector2(3.27888, 2.89063)
+[node name="HudLayout" type="Node" parent="CanvasLayer"]
+
+[node name="hud" type="Sprite2D" parent="CanvasLayer/HudLayout"]
+position = Vector2(584, 604.098)
+scale = Vector2(3.27888, 2.96144)
 texture = ExtResource("3_4nxdm")
 region_enabled = true
-region_rect = Rect2(9, 10, 216, 32)
+region_rect = Rect2(9.47491, 10.3095, 215.085, 31.0566)
 
-[node name="hud2" type="Sprite2D" parent="HudLayout"]
-position = Vector2(859, 601.102)
+[node name="hud2" type="Sprite2D" parent="CanvasLayer/HudLayout"]
+position = Vector2(857, 604)
 scale = Vector2(3.27888, 4.08168)
 texture = ExtResource("3_4nxdm")
 region_enabled = true
 region_rect = Rect2(175.682, 10.3191, 48.8927, 22.4808)
 
-[node name="hud3" type="Sprite2D" parent="HudLayout"]
-position = Vector2(478.653, 599.592)
+[node name="hud3" type="Sprite2D" parent="CanvasLayer/HudLayout"]
+position = Vector2(475, 604)
 scale = Vector2(3.30611, 4.44084)
 texture = ExtResource("3_4nxdm")
 region_enabled = true
 region_rect = Rect2(59.6795, 10.908, 48.5619, 20.3241)
 
-[node name="arma" type="Sprite2D" parent="HudLayout"]
-position = Vector2(313.663, 601.269)
-scale = Vector2(4.31393, 5.09139)
+[node name="arma" type="Sprite2D" parent="CanvasLayer/HudLayout"]
+position = Vector2(313.663, 601.769)
+scale = Vector2(4.31393, 5.15388)
 texture = ExtResource("3_4nxdm")
 region_enabled = true
 region_rect = Rect2(179.543, 69.2371, 34.6637, 16.6778)
 
-[node name="HpLabel" type="Label" parent="HudLayout"]
+[node name="HpLabel" type="Label" parent="CanvasLayer/HudLayout"]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
@@ -152,16 +156,16 @@ theme_override_fonts/font = ExtResource("2_5nt5s")
 theme_override_font_sizes/font_size = 30
 text = "100%"
 
-[node name="PlayerAnim" type="AnimatedSprite2D" parent="HudLayout"]
+[node name="PlayerAnim" type="AnimatedSprite2D" parent="CanvasLayer/HudLayout"]
 position = Vector2(608, 603)
 scale = Vector2(2, 2.02632)
 sprite_frames = SubResource("SpriteFrames_qfeqy")
 animation = &"normal"
 autoplay = "normal"
 
-[node name="Labels" type="Node" parent="."]
+[node name="Labels" type="Node" parent="CanvasLayer"]
 
-[node name="HealthLabel" type="Label" parent="Labels"]
+[node name="HealthLabel" type="Label" parent="CanvasLayer/Labels"]
 offset_left = 406.0
 offset_top = 604.0
 offset_right = 576.0
@@ -172,7 +176,7 @@ theme_override_font_sizes/font_size = 25
 text = "HEALTH"
 vertical_alignment = 1
 
-[node name="KillLabel" type="Label" parent="Labels"]
+[node name="KillLabel" type="Label" parent="CanvasLayer/Labels"]
 offset_left = 785.0
 offset_top = 561.0
 offset_right = 934.0
@@ -184,7 +188,7 @@ text = "0/0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="KillLabel2" type="Label" parent="Labels"]
+[node name="KillLabel2" type="Label" parent="CanvasLayer/Labels"]
 offset_left = 797.0
 offset_top = 602.0
 offset_right = 925.0
@@ -196,7 +200,7 @@ theme_override_font_sizes/font_size = 29
 text = "KILLS"
 vertical_alignment = 1
 
-[node name="GameStatusLabel" type="Label" parent="Labels"]
+[node name="GameStatusLabel" type="Label" parent="CanvasLayer/Labels"]
 offset_left = 371.0
 offset_top = 122.0
 offset_right = 679.0
@@ -206,62 +210,61 @@ text = "Tic-Tac-Shot"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TurnLabel" type="Label" parent="Labels"]
+[node name="TurnLabel" type="Label" parent="CanvasLayer/Labels"]
 offset_left = 378.0
 offset_top = 153.0
 offset_right = 686.0
 offset_bottom = 176.0
 theme_override_fonts/font = ExtResource("2_5nt5s")
 
-[node name="TicTacToeBoardContainer" type="PanelContainer" parent="."]
+[node name="TicTacToeBoardContainer" type="PanelContainer" parent="CanvasLayer"]
 offset_left = 375.0
 offset_top = 181.0
 offset_right = 683.0
 offset_bottom = 489.0
 
-[node name="TicTacToeGrid" type="GridContainer" parent="TicTacToeBoardContainer"]
+[node name="TicTacToeGrid" type="GridContainer" parent="CanvasLayer/TicTacToeBoardContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 columns = 3
 
-[node name="Cell_0_0" type="Button" parent="TicTacToeBoardContainer/TicTacToeGrid"]
+[node name="Cell_0_0" type="Button" parent="CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Cell_0_1" type="Button" parent="TicTacToeBoardContainer/TicTacToeGrid"]
+[node name="Cell_0_1" type="Button" parent="CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Cell_0_2" type="Button" parent="TicTacToeBoardContainer/TicTacToeGrid"]
+[node name="Cell_0_2" type="Button" parent="CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Cell_1_0" type="Button" parent="TicTacToeBoardContainer/TicTacToeGrid"]
+[node name="Cell_1_0" type="Button" parent="CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Cell_1_1" type="Button" parent="TicTacToeBoardContainer/TicTacToeGrid"]
+[node name="Cell_1_1" type="Button" parent="CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Cell_1_2" type="Button" parent="TicTacToeBoardContainer/TicTacToeGrid"]
+[node name="Cell_1_2" type="Button" parent="CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Cell_2_0" type="Button" parent="TicTacToeBoardContainer/TicTacToeGrid"]
+[node name="Cell_2_0" type="Button" parent="CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Cell_2_1" type="Button" parent="TicTacToeBoardContainer/TicTacToeGrid"]
+[node name="Cell_2_1" type="Button" parent="CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Cell_2_2" type="Button" parent="TicTacToeBoardContainer/TicTacToeGrid"]
+[node name="Cell_2_2" type="Button" parent="CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="RestartGameButton" type="Button" parent="."]
-layout_mode = 0
+[node name="RestartGameButton" type="Button" parent="CanvasLayer"]
 offset_left = 1046.0
 offset_top = 609.0
 offset_right = 1133.0

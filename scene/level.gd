@@ -85,6 +85,8 @@ func enemy_spawn() -> void:
 func _hide_fps_world() -> void:
 	dun_gen.visible = false
 	if is_instance_valid(player_instance):
+		player_instance.queue_free()
+		("print limpando player da cena")
 		player_instance.visible = false
 		player_instance.set_physics_process(false)
 

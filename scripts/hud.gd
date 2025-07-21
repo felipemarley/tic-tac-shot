@@ -1,23 +1,23 @@
 extends Control
 
-@onready var hp_label: Label = $HudLayout/HpLabel
-@onready var kill_label: Label = $Labels/KillLabel
+@onready var hp_label: Label = $CanvasLayer/HudLayout/HpLabel
+@onready var kill_label: Label = $CanvasLayer/Labels/KillLabel
 
-@onready var hud: Sprite2D = $HudLayout/hud
-@onready var hud2: Sprite2D = $HudLayout/hud2
-@onready var hud3: Sprite2D = $HudLayout/hud3
-@onready var arma: Sprite2D = $HudLayout/arma
-@onready var player_anim: AnimatedSprite2D = $HudLayout/PlayerAnim
-@onready var health_label: Label = $Labels/HealthLabel
-@onready var kill_label2: Label = $Labels/KillLabel2
+@onready var hud: Sprite2D = $CanvasLayer/HudLayout/hud
+@onready var hud2: Sprite2D = $CanvasLayer/HudLayout/hud2
+@onready var hud3: Sprite2D = $CanvasLayer/HudLayout/hud3
+@onready var arma: Sprite2D = $CanvasLayer/HudLayout/arma
+@onready var player_anim: AnimatedSprite2D = $CanvasLayer/HudLayout/PlayerAnim
+@onready var health_label: Label = $CanvasLayer/Labels/HealthLabel
+@onready var kill_label2: Label = $CanvasLayer/Labels/KillLabel2
 
 
 # Referências para os elementos do tabuleiro
-@onready var tic_tac_toe_board_container: Control = $TicTacToeBoardContainer # O PanelContainer que contém o tabuleiro
-@onready var tic_tac_toe_grid: GridContainer = $TicTacToeBoardContainer/TicTacToeGrid # O GridContainer
-@onready var turn_label: Label = $Labels/TurnLabel # Label para o turno
-@onready var game_status_label: Label = $Labels/GameStatusLabel # Label para status geral do jogo
-@onready var restart_game_button: Button = $RestartGameButton # Botão de reiniciar
+@onready var tic_tac_toe_board_container: Control = $CanvasLayer/TicTacToeBoardContainer # O PanelContainer que contém o tabuleiro
+@onready var tic_tac_toe_grid: GridContainer = $CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid # O GridContainer
+@onready var turn_label: Label = $CanvasLayer/Labels/TurnLabel # Label para o turno
+@onready var game_status_label: Label = $CanvasLayer/Labels/GameStatusLabel # Label para status geral do jogo
+@onready var restart_game_button: Button = $CanvasLayer/RestartGameButton # Botão de reiniciar
 @onready var game_status_timer: Timer = $GameStatusTimer
 
 # HealthComponent do Player
