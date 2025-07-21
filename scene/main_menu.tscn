@@ -1,6 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://igpcrmknujb7"]
+[gd_scene load_steps=7 format=3 uid="uid://igpcrmknujb7"]
 
 [ext_resource type="Script" uid="uid://4txjljirv46j" path="res://scripts/main_menu.gd" id="1_3er1b"]
+[ext_resource type="Texture2D" uid="uid://d088u1r2m5y6m" path="res://assest/background/bg.png" id="2_0iwki"]
+[ext_resource type="FontFile" uid="uid://bklbd5gqwtvak" path="res://assest/font/amazdoom/AmazDooMLeft2.ttf" id="2_2fwvj"]
+[ext_resource type="Theme" uid="uid://mbsg4xqnedxi" path="res://assest/themes/FlatUI4/kenneyUI-red.tres" id="4_sepwh"]
+[ext_resource type="FontFile" uid="uid://jtgco7pl5ab8" path="res://assest/themes/FlatUI4/kenvector_future.ttf" id="5_sepwh"]
+
+[sub_resource type="Theme" id="Theme_sepwh"]
+default_font = ExtResource("2_2fwvj")
+default_font_size = 30
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -13,20 +21,50 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_3er1b")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -2.0
-offset_right = -2.0
+offset_left = -16.0
+offset_top = -19.0
+offset_right = 16.0
+offset_bottom = 11.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_0iwki")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+layout_mode = 0
+offset_right = 1151.0
+offset_bottom = 648.0
+color = Color(0, 0, 0, 0.34902)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -424.0
+offset_top = -197.5
+offset_right = 424.0
+offset_bottom = 197.5
 grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
 [node name="GameNameLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 37
+theme = SubResource("Theme_sepwh")
+theme_override_colors/font_color = Color(0.803922, 0.984314, 0.117647, 0.862745)
+theme_override_fonts/font = ExtResource("2_2fwvj")
+theme_override_font_sizes/font_size = 235
 text = "Tic-Tac-Shot"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -37,9 +75,20 @@ size_flags_vertical = 3
 
 [node name="StartGameButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
+theme = ExtResource("4_sepwh")
+theme_override_fonts/font = ExtResource("5_sepwh")
+theme_override_font_sizes/font_size = 41
 text = "Iniciar Jogo"
+vertical_icon_alignment = 2
 
 [node name="Spacer2" type="Control" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="Opcoes" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_sepwh")
+theme_override_fonts/font = ExtResource("5_sepwh")
+theme_override_font_sizes/font_size = 41
+text = "Opções"
+vertical_icon_alignment = 2

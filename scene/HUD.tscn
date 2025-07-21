@@ -56,6 +56,7 @@ offset_bottom = 489.0
 
 [node name="TicTacToeGrid" type="GridContainer" parent="TicTacToeBoardContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
 columns = 3
 
 [node name="Cell_0_0" type="Button" parent="TicTacToeBoardContainer/TicTacToeGrid"]
