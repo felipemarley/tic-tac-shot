@@ -2,11 +2,35 @@ extends Node3D
 
 signal enemies_spawned_for_round(count: int)
 
+#@onready var pause_menu  = $HUD/PauseMenu
 @onready var dun_gen = $DunGen
 @onready var player_scene : PackedScene = preload("res://scene/player.tscn") # Renomeado para evitar conflito com 'player_instance'
 @onready var enemy_scene : PackedScene = preload("res://scene/enemy.tscn") # Renomeado para evitar conflito com 'e'
 var player_instance : CharacterBody3D = null
 
+#var paused = false
+
+#func _process(delta):
+	#if Input.is_action_pressed("pause"):
+		#print("clik")
+		#pauseMenu()
+		#
+
+#func _input(event):
+	#if event.is_action_pressed("pause"):
+		#print("clik")
+		#pauseMenu()
+#
+#func pauseMenu():
+	#if paused:
+		#pause_menu.hide()
+		#Engine.time_scale = 1
+	#else:
+		#pause_menu.show()
+		#Engine.time_scale = 0
+		#
+	#paused = !paused
+	
 
 func _ready() -> void:
 	# Conecta o sinal do GameManager para iniciar a fase FPS

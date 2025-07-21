@@ -1,9 +1,10 @@
-[gd_scene load_steps=16 format=3 uid="uid://bhghrhbcmnu10"]
+[gd_scene load_steps=17 format=3 uid="uid://bhghrhbcmnu10"]
 
 [ext_resource type="Script" uid="uid://c7iwygufo6jgf" path="res://scripts/hud.gd" id="1_mmka4"]
 [ext_resource type="FontFile" uid="uid://d24u7vsgokjh6" path="res://assest/font/doom/DooM.ttf" id="2_5nt5s"]
 [ext_resource type="Texture2D" uid="uid://gtt8ixyjm83f" path="res://assest/hud/SNES - DOOM - HUD.png" id="3_4nxdm"]
 [ext_resource type="Texture2D" uid="uid://nvcknocohql5" path="res://assest/hud/SNES_-_DOOM_-_HUD-removebg-preview.png" id="4_pgw44"]
+[ext_resource type="PackedScene" uid="uid://cpnkoy7e432s8" path="res://scene/PauseMenu.tscn" id="5_yx4hk"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yx4hk"]
 atlas = ExtResource("4_pgw44")
@@ -272,3 +273,5 @@ offset_bottom = 640.0
 text = "Novo Jogo"
 
 [node name="GameStatusTimer" type="Timer" parent="."]
+
+[node name="PauseMenu" parent="." instance=ExtResource("5_yx4hk")]

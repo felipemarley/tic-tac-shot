@@ -15,6 +15,9 @@ const FOOTSTEP_INTERVAL = 0.4
 var step_timer = 0.0
 var was_on_floor = false
 
+var camera_paused: bool = false
+
+
 func _ready() -> void:
 	footstep_sounds = [
 		preload("res://scene/st1-footstep-sfx-323053.mp3"),
@@ -42,13 +45,18 @@ func _input(event) -> void:
 	if Input.is_key_pressed(KEY_E):
 		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-		else: Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	if event is InputEventMouseMotion :
+		else:
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+	if event is InputEventMouseMotion and not camera_paused:
 		rotation_degrees.y -= event.relative.x * MOUSE_SENS
 		pistol.rotation_degrees.y = rotation_degrees.y
 
 	if event.is_action_pressed("cheat_spawn_enemies"):
-		GameManager.teleport_cheat_enemies_in_front(global_position, -global_transform.basis.z) # Passa posição e direção à frente
+		GameManager.teleport_cheat_enemies_in_front(global_position, -global_transform.basis.z)
+
+func set_camera_paused(pause: bool):
+	camera_paused = pause
 
 
 func _physics_process(delta: float) -> void:

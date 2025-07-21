@@ -1,4 +1,5 @@
 extends Control
+@onready var pause_menu = $PauseMenu
 
 @onready var hp_label: Label = $CanvasLayer/HudLayout/HpLabel
 @onready var kill_label: Label = $CanvasLayer/Labels/KillLabel
@@ -11,7 +12,6 @@ extends Control
 @onready var health_label: Label = $CanvasLayer/Labels/HealthLabel
 @onready var kill_label2: Label = $CanvasLayer/Labels/KillLabel2
 
-
 # Referências para os elementos do tabuleiro
 @onready var tic_tac_toe_board_container: Control = $CanvasLayer/TicTacToeBoardContainer # O PanelContainer que contém o tabuleiro
 @onready var tic_tac_toe_grid: GridContainer = $CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid # O GridContainer
@@ -20,10 +20,43 @@ extends Control
 @onready var restart_game_button: Button = $CanvasLayer/RestartGameButton # Botão de reiniciar
 @onready var game_status_timer: Timer = $GameStatusTimer
 
+@onready var player = get_tree().get_root().find_child("Player", true, false)
+
+
 # HealthComponent do Player
 var player_health_component: Node = null
 
+var paused = false
+
+func _input(event):
+	if event.is_action_pressed("pause"):
+		print("clik")
+		pauseMenu()
+		
+		
+func pauseMenu():
+	if paused:
+		print("depausei")
+		pause_menu.hide()
+		Engine.time_scale = 1
+		
+		if player:
+			player.set_camera_paused(false) # ou false, dependendo do estado do pause
+	else:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+		print("pausei")
+		pause_menu.show()
+		if player:
+			player.set_camera_paused(true) # ou false, dependendo do estado do pause
+		Engine.time_scale = 0
+
+		
+	paused = !paused
+
 func _ready():
+	pause_menu.hide()
+
 	# HUD está sempre por cima de outros elementos 3D
 	set_process_mode(Node.PROCESS_MODE_ALWAYS)
 
