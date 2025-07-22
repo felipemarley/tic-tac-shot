@@ -14,7 +14,7 @@ signal time_updated(time_left: float, time_percentage: float)
 signal phase_time_limit_changed(new_limit: float)
 
 
-var fps_phase_time_limit: float = 60.0  # Tempo inicial
+var fps_phase_time_limit: float = 70.0  # Tempo inicial
 var current_time: float = 0.0
 var time_is_running: bool = false
 var difficulty_curve: Curve = Curve.new()  # Para ajustar a progressão
@@ -73,11 +73,11 @@ func _on_timeout():
 
 func start_new_fps_round(total_enemies: int) -> void:
 	# Ajusta dificuldade baseado no progresso do jogo
-	var progress = float(player_choices_counter) / 9.0
+	var progress = float(player_choices_counter) / 8.0
 	var difficulty = difficulty_curve.sample(progress)
 
 	# Define tempo e inimigos balanceados
-	fps_phase_time_limit = max(20.0, 60.0 - (40.0 * progress))  # Diminui tempo
+	fps_phase_time_limit = max(40.0, 70.0 - (40.0 * progress))  # Diminui tempo
 	enemies_in_current_round = min(15, ceil(total_enemies * (0.5 + difficulty)))  # Limita inimigos
 
 	current_time = fps_phase_time_limit

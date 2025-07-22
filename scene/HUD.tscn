@@ -332,6 +332,7 @@ offset_left = 1003.0
 offset_top = 592.0
 offset_right = 1133.32
 offset_bottom = 634.251
+mouse_default_cursor_shape = 2
 theme = ExtResource("6_0qwpj")
 text = "Novo Jogo"
 

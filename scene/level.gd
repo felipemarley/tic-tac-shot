@@ -92,7 +92,7 @@ func enemy_spawn(min_required) -> void:
 		for tile in dun_gen.room_tiles:
 			randomize()
 			var spawn_enemy_chanc : int = randi_range(1, (tile.size()/2))
-			if(spawn_enemy_chanc < tile.size() / 2 and spawn_enemy_chanc > min_required/24):
+			if(spawn_enemy_chanc < tile.size() / 2 and spawn_enemy_chanc > min_required/22):
 				continue
 			if tile.has(cell):
 				var e = enemy_scene.instantiate()
