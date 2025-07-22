@@ -8,6 +8,9 @@ signal game_state_changed(new_state: GameState)
 signal board_updated(board_state: Array[Array])
 signal turn_changed(player_side: PlayerSide)
 signal start_fps_level()
+signal animate_cell( x : int, y : int )
+
+
 
 # GAMEPLAY LOOP
 enum PlayerSide {
@@ -145,6 +148,12 @@ func _process_ai_turn() -> void:
 	var best_move := find_best_move(PlayerSide.O, PlayerSide.X)
 	if best_move != Vector2i(-1, -1):
 		last_chosen_cell = best_move
+		
+		animate_cell.emit(best_move.x, best_move.y)
+		
+		# Aguarda tempo suficiente para a animação terminar (ex: 3 segundos)
+		await get_tree().create_timer(3.0).timeout
+		
 		_set_game_state(GameState.FPS_PHASE)
 		start_fps_level.emit()
 

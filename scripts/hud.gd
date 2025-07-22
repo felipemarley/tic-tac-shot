@@ -24,6 +24,22 @@ extends Control
 
 @onready var player = get_tree().get_root().find_child("Player", true, false)
 
+@onready var cell0_0 = $CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid/Cell_0_0
+@onready var cell0_1 = $CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid/Cell_0_1
+@onready var cell0_2 = $CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid/Cell_0_2
+@onready var cell1_0 = $CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid/Cell_1_0
+@onready var cell1_1 = $CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid/Cell_1_1
+@onready var cell1_2 = $CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid/Cell_1_2
+@onready var cell2_0 = $CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid/Cell_2_0
+@onready var cell2_1 = $CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid/Cell_2_1
+@onready var cell2_2 = $CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid/Cell_2_2
+
+# Declarado no BoardUI.gd
+@onready var cells = [
+	[cell0_0, cell0_1, cell0_2],
+	[cell1_0, cell1_1, cell1_2],
+	[cell2_0, cell2_1, cell2_2]
+]
 
 # HealthComponent do Player
 var player_health_component: Node = null
@@ -67,6 +83,8 @@ func _ready():
 	# Contagem de kills
 	GameManager.kill_count_changed.connect(self.update_kill_count)
 	update_kill_count(GameManager.kill_count)
+	
+	GameManager.animate_cell.connect(self._animate_cell)
 
 	GameManager.player_spawned.connect(self._on_player_spawned)
 
@@ -141,7 +159,25 @@ func _on_player_health_changed(new_hp: int):
 		hp_label.modulate = Color("green") # Verde
 		player_anim.play("normal")
 
+func _animate_cell(row: int, col: int):
+	var cell = cells[row][col]
 
+	var blink_time := 3.0
+	var blink_interval := 0.3
+	var elapsed := 0.0
+	
+	if cell == null:
+		print("Célula não encontrada em (%d, %d)" % [row, col])
+		return
+	if cell:
+		print("Célula encontrada em (%d, %d)" % [row, col])
+		while elapsed < blink_time:
+			cell.modulate = Color(1, 1, 1, 0.3)  # branco com 30% opacidade
+			await get_tree().create_timer(blink_interval / 2).timeout
+			cell.modulate = Color(1, 1, 1, 1)    # totalmente opaco
+			await get_tree().create_timer(blink_interval / 2).timeout
+			elapsed += blink_interval
+	
 
 # Chamado quando um botão de célula do tabuleiro é pressionado
 func _on_cell_button_pressed(row: int, col: int) -> void:
