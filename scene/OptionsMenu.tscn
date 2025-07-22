@@ -89,6 +89,20 @@ text = "MUTE"
 layout_mode = 2
 theme = ExtResource("1_7rmqv")
 
+[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/VBoxContainer2/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="minimapa" type="Label" parent="Panel/VBoxContainer2/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_smk7u")
+text = "minimapa"
+
+[node name="CheckBoxMM" type="CheckBox" parent="Panel/VBoxContainer2/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+theme = ExtResource("1_7rmqv")
+
 [node name="resolution" type="Label" parent="Panel/VBoxContainer2/VBoxContainer"]
 visible = false
 layout_mode = 2
@@ -123,5 +137,6 @@ text = "BACK"
 
 [connection signal="value_changed" from="Panel/VBoxContainer2/VBoxContainer/volumeSlider" to="." method="_on_hsdx_value_changed"]
 [connection signal="toggled" from="Panel/VBoxContainer2/VBoxContainer/HBoxContainer/CheckBox" to="." method="_on_check_box_toggled"]
+[connection signal="toggled" from="Panel/VBoxContainer2/VBoxContainer/HBoxContainer2/CheckBoxMM" to="." method="_on_check_box_mm_toggled"]
 [connection signal="item_selected" from="Panel/VBoxContainer2/VBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]
 [connection signal="pressed" from="Panel/VBoxContainer2/VBoxContainer/Button" to="." method="_on_button_pressed"]

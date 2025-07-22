@@ -10,3 +10,36 @@ script = ExtResource("1_36wlx")
 [node name="HUD" parent="." instance=ExtResource("2_7g0b6")]
 
 [node name="DunGen" parent="." instance=ExtResource("2_dmi07")]
+
+[node name="minimapa" type="CanvasLayer" parent="."]
+layer = 5
+
+[node name="ColorRect" type="ColorRect" parent="minimapa"]
+custom_minimum_size = Vector2(200, 200)
+offset_left = 910.0
+offset_top = 35.0
+offset_right = 1110.0
+offset_bottom = 235.0
+color = Color(0.125911, 0.125911, 0.125911, 1)
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="minimapa/ColorRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -90.0
+offset_top = -90.0
+offset_right = 90.0
+offset_bottom = 90.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewport" type="SubViewport" parent="minimapa/ColorRect/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(180, 180)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="minimapa/ColorRect/SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 19.5494, 32.6203, 19.6575)

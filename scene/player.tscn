@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://e1w0n8q008ub"]
+[gd_scene load_steps=11 format=3 uid="uid://e1w0n8q008ub"]
 
 [ext_resource type="Script" uid="uid://br2ijnxbj6ovr" path="res://scene/player.gd" id="1_hjaqi"]
 [ext_resource type="PackedScene" uid="uid://bcoqs5sdfav7a" path="res://ui_ux/pistol.tscn" id="1_xo3ru"]
@@ -26,8 +26,13 @@ glow_strength = 0.54
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hjaqi"]
 radius = 0.25
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ct4mp"]
+albedo_color = Color(1, 0.12, 0.12, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_ct4mp"]
+material = SubResource("StandardMaterial3D_ct4mp")
+
 [node name="Player" type="CharacterBody3D"]
-visible = false
 collision_mask = 2
 script = ExtResource("1_hjaqi")
 
@@ -66,3 +71,7 @@ stream = ExtResource("3_fvtld")
 attenuation_model = 1
 pitch_scale = 1.8
 bus = &"SDX"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+mesh = SubResource("SphereMesh_ct4mp")

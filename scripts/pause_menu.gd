@@ -10,4 +10,5 @@ func _on_opções_pressed() -> void:
 
 
 func _on_sair_pressed() -> void:
+	# Vai para o menu
 	get_tree().change_scene_to_file("res://scene/main_menu.tscn")
