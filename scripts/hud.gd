@@ -42,6 +42,8 @@ func pauseMenu():
 		pause_menu.hide()
 		Engine.time_scale = 1
 		
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
 		if player:
 			player.set_camera_paused(false) # ou false, dependendo do estado do pause
 	else:

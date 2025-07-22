@@ -7,7 +7,7 @@ signal died_and_killed()
 @onready var navigation : NavigationAgent3D = $NavigationAgent3D
 @onready var health_component = $HealthComponent
 var player_ref : CharacterBody3D = null
-const MOVE_SPEED : float = 10
+const MOVE_SPEED : float = 15
 
 @export var attack_damage: int = 10
 @export var attack_cooldown: float = 0.5
@@ -39,9 +39,6 @@ func _physics_process(delta: float) -> void:
 		return
 
 	if player_ref:
-		print("Tem caminho?", navigation.is_navigation_finished())
-		print("Próximo ponto:", navigation.get_next_path_position())
-
 		# Atualiza o destino do pathfinding apenas no intervalo definido
 		path_update_timer -= delta
 		if path_update_timer <= 0:
@@ -64,7 +61,6 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
-	print("Entrou na área:", body.name)
 	if body.name == "Player":
 		player_ref = body
 

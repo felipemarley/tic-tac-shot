@@ -2,6 +2,7 @@ extends CanvasLayer
 
 @onready var hud_main = $".."
 @onready var options = $OptionsMenu
+
 func _on_voltar_pressed() -> void:
 	hud_main.pauseMenu()
 
