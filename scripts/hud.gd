@@ -4,6 +4,8 @@ extends Control
 @onready var hp_label: Label = $CanvasLayer/HudLayout/HpLabel
 @onready var kill_label: Label = $CanvasLayer/Labels/KillLabel
 
+@onready var texture_react = $CanvasLayer/TextureRect
+@onready var color_react = $CanvasLayer/ColorRect
 @onready var hud: Sprite2D = $CanvasLayer/HudLayout/hud
 @onready var hud2: Sprite2D = $CanvasLayer/HudLayout/hud2
 @onready var hud3: Sprite2D = $CanvasLayer/HudLayout/hud3
@@ -191,11 +193,13 @@ func _on_game_state_changed(new_state: GameManager.GameState) -> void:
 			player_anim.visible = false
 			health_label.visible = false
 			kill_label2.visible = false
+			texture_react.visible = false
+			color_react.visible = false
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 		GameManager.GameState.TIC_TAC_TOE_TURN:
 			tic_tac_toe_board_container.visible = true
-			game_status_label.text = "Selecione uma celula para conquistar:"
+			game_status_label.text = "Selecione uma celula para \n conquistar"
 			game_status_timer.stop()
 			restart_game_button.visible = false
 			hp_label.visible = false
@@ -208,6 +212,8 @@ func _on_game_state_changed(new_state: GameManager.GameState) -> void:
 			player_anim.visible = false
 			health_label.visible = false
 			kill_label2.visible = false
+			texture_react.visible = true
+			color_react.visible = true
 			_enable_board_buttons(GameManager.current_player_side == GameManager.PlayerSide.X)
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE # Mouse visível para interagir com o tabuleiro
 
@@ -226,6 +232,8 @@ func _on_game_state_changed(new_state: GameManager.GameState) -> void:
 			player_anim.visible = true
 			health_label.visible = true
 			kill_label2.visible = true
+			texture_react.visible = false
+			color_react.visible = false
 
 		GameManager.GameState.ROUND_END:
 			tic_tac_toe_board_container.visible = false
@@ -242,6 +250,8 @@ func _on_game_state_changed(new_state: GameManager.GameState) -> void:
 			player_anim.visible = true
 			health_label.visible = true
 			kill_label2.visible = true
+			texture_react.visible = false
+			color_react.visible = false
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 		GameManager.GameState.GAME_OVER:
@@ -257,6 +267,8 @@ func _on_game_state_changed(new_state: GameManager.GameState) -> void:
 			player_anim.visible = false
 			health_label.visible = false
 			kill_label2.visible = false
+			texture_react.visible = true
+			color_react.visible = true
 			game_status_timer.stop()
 			game_status_label.visible = true
 			if GameManager.check_tic_tac_toe_win(GameManager.PlayerSide.X):

@@ -19,6 +19,11 @@ config/icon="res://icon.svg"
 
 GameManager="*res://scripts/GameManager.gd"
 
+[display]
+
+window/stretch/mode="viewport"
+window/stretch/aspect="ignore"
+
 [editor]
 
 version_control/plugin_name="GitPlugin"

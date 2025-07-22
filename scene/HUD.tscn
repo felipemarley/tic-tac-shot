@@ -1,10 +1,13 @@
-[gd_scene load_steps=17 format=3 uid="uid://bhghrhbcmnu10"]
+[gd_scene load_steps=20 format=3 uid="uid://bhghrhbcmnu10"]
 
 [ext_resource type="Script" uid="uid://c7iwygufo6jgf" path="res://scripts/hud.gd" id="1_mmka4"]
 [ext_resource type="FontFile" uid="uid://d24u7vsgokjh6" path="res://assest/font/doom/DooM.ttf" id="2_5nt5s"]
+[ext_resource type="Texture2D" uid="uid://ciu6bdh0thkqr" path="res://assest/background/Dungeon_brick_wall_grey.png.png" id="2_ldol0"]
 [ext_resource type="Texture2D" uid="uid://gtt8ixyjm83f" path="res://assest/hud/SNES - DOOM - HUD.png" id="3_4nxdm"]
 [ext_resource type="Texture2D" uid="uid://nvcknocohql5" path="res://assest/hud/SNES_-_DOOM_-_HUD-removebg-preview.png" id="4_pgw44"]
 [ext_resource type="PackedScene" uid="uid://cpnkoy7e432s8" path="res://scene/PauseMenu.tscn" id="5_yx4hk"]
+[ext_resource type="Theme" uid="uid://mbsg4xqnedxi" path="res://assest/themes/FlatUI4/kenneyUI-red.tres" id="6_0qwpj"]
+[ext_resource type="FontFile" uid="uid://jtgco7pl5ab8" path="res://assest/themes/FlatUI4/kenvector_future.ttf" id="6_yxe7t"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yx4hk"]
 atlas = ExtResource("4_pgw44")
@@ -112,6 +115,26 @@ script = ExtResource("1_mmka4")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 10
 
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -42.0
+offset_top = -76.0
+offset_right = 16.0
+offset_bottom = 42.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_ldol0")
+expand_mode = 1
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+offset_left = 361.0
+offset_top = 32.0
+offset_right = 789.0
+offset_bottom = 582.0
+color = Color(0.294118, 0.294118, 0.294118, 0.807843)
+
 [node name="HudLayout" type="Node" parent="CanvasLayer"]
 
 [node name="hud" type="Sprite2D" parent="CanvasLayer/HudLayout"]
@@ -202,27 +225,36 @@ text = "KILLS"
 vertical_alignment = 1
 
 [node name="GameStatusLabel" type="Label" parent="CanvasLayer/Labels"]
-offset_left = 371.0
-offset_top = 122.0
-offset_right = 679.0
-offset_bottom = 145.0
-theme_override_fonts/font = ExtResource("2_5nt5s")
+offset_left = 422.0
+offset_top = 84.0
+offset_right = 730.0
+offset_bottom = 107.0
+theme_override_fonts/font = ExtResource("6_yxe7t")
 text = "Tic-Tac-Shot"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="TurnLabel" type="Label" parent="CanvasLayer/Labels"]
-offset_left = 378.0
-offset_top = 153.0
-offset_right = 686.0
-offset_bottom = 176.0
+offset_left = 423.0
+offset_top = 131.0
+offset_right = 731.0
+offset_bottom = 154.0
 theme_override_fonts/font = ExtResource("2_5nt5s")
+horizontal_alignment = 1
 
 [node name="TicTacToeBoardContainer" type="PanelContainer" parent="CanvasLayer"]
-offset_left = 375.0
-offset_top = 181.0
-offset_right = 683.0
-offset_bottom = 489.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -154.0
+offset_top = -154.0
+offset_right = 154.0
+offset_bottom = 154.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
 
 [node name="TicTacToeGrid" type="GridContainer" parent="CanvasLayer/TicTacToeBoardContainer"]
 layout_mode = 2
@@ -232,46 +264,57 @@ columns = 3
 [node name="Cell_0_0" type="Button" parent="CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 
 [node name="Cell_0_1" type="Button" parent="CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 
 [node name="Cell_0_2" type="Button" parent="CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 
 [node name="Cell_1_0" type="Button" parent="CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 
 [node name="Cell_1_1" type="Button" parent="CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 
 [node name="Cell_1_2" type="Button" parent="CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 
 [node name="Cell_2_0" type="Button" parent="CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 
 [node name="Cell_2_1" type="Button" parent="CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 
 [node name="Cell_2_2" type="Button" parent="CanvasLayer/TicTacToeBoardContainer/TicTacToeGrid"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 
 [node name="RestartGameButton" type="Button" parent="CanvasLayer"]
-offset_left = 1046.0
-offset_top = 609.0
-offset_right = 1133.0
-offset_bottom = 640.0
+offset_left = 1003.0
+offset_top = 592.0
+offset_right = 1133.32
+offset_bottom = 634.251
+theme = ExtResource("6_0qwpj")
 text = "Novo Jogo"
 
 [node name="GameStatusTimer" type="Timer" parent="."]
 
 [node name="PauseMenu" parent="." instance=ExtResource("5_yx4hk")]
+visible = false
