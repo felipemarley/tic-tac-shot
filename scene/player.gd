@@ -17,7 +17,6 @@ var was_on_floor = false
 
 var camera_paused: bool = false
 
-
 func _ready() -> void:
 	footstep_sounds = [
 		preload("res://scene/st1-footstep-sfx-323053.mp3"),

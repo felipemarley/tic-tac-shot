@@ -82,10 +82,9 @@ animations = [{
 }]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_8u16h"]
-radius = 12.3794
+radius = 4.88525
 
 [node name="Enemy" type="CharacterBody3D" groups=["enemies"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14183, 0)
 collision_layer = 4
 collision_mask = 3
 script = ExtResource("1_yvcfn")
@@ -96,10 +95,11 @@ script = ExtResource("4_b7koy")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(0.999749, -0.0141373, -0.0174013, -0.0174158, -0.000898981, -0.999848, 0.0141195, 0.9999, -0.00114497, 0.012297, 0.0681956, -0.0234275)
 shape = SubResource("CylinderShape3D_b7koy")
-debug_color = Color(0.657006, 0.726105, 0.968416, 0.831373)
+debug_color = Color(0.4365, 0.552092, 0.97, 0.913725)
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
 transform = Transform3D(-0.599979, 0, 0.00499509, 0, 0.6, 0, -0.00499509, 0, -0.599979, 0, 0, 0)
+visible = false
 sprite_frames = SubResource("SpriteFrames_b7koy")
 animation = &"O"
 autoplay = "O"

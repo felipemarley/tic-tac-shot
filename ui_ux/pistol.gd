@@ -5,11 +5,9 @@ extends Node3D
 @export_node_path("Camera3D") var cam_path
 @onready var shoot: AudioStreamPlayer = $Shoot
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	animation.play("Idle")
-
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

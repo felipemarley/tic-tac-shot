@@ -39,6 +39,9 @@ func _physics_process(delta: float) -> void:
 		return
 
 	if player_ref:
+		print("Tem caminho?", navigation.is_navigation_finished())
+		print("Próximo ponto:", navigation.get_next_path_position())
+
 		# Atualiza o destino do pathfinding apenas no intervalo definido
 		path_update_timer -= delta
 		if path_update_timer <= 0:
@@ -61,6 +64,7 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
+	print("Entrou na área:", body.name)
 	if body.name == "Player":
 		player_ref = body
 
