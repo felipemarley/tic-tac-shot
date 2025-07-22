@@ -68,7 +68,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_smk7u")
 text = "Volume"
 
-[node name="HSDX" type="HSlider" parent="Panel/VBoxContainer2/VBoxContainer"]
+[node name="volumeSlider" type="HSlider" parent="Panel/VBoxContainer2/VBoxContainer"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
 theme = ExtResource("1_7rmqv")
@@ -121,7 +121,7 @@ mouse_default_cursor_shape = 2
 theme = ExtResource("1_7rmqv")
 text = "BACK"
 
-[connection signal="value_changed" from="Panel/VBoxContainer2/VBoxContainer/HSDX" to="." method="_on_hsdx_value_changed"]
+[connection signal="value_changed" from="Panel/VBoxContainer2/VBoxContainer/volumeSlider" to="." method="_on_hsdx_value_changed"]
 [connection signal="toggled" from="Panel/VBoxContainer2/VBoxContainer/HBoxContainer/CheckBox" to="." method="_on_check_box_toggled"]
 [connection signal="item_selected" from="Panel/VBoxContainer2/VBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]
 [connection signal="pressed" from="Panel/VBoxContainer2/VBoxContainer/Button" to="." method="_on_button_pressed"]

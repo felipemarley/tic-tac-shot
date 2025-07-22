@@ -1,10 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://igpcrmknujb7"]
+[gd_scene load_steps=9 format=3 uid="uid://igpcrmknujb7"]
 
 [ext_resource type="Script" uid="uid://4txjljirv46j" path="res://scripts/main_menu.gd" id="1_3er1b"]
 [ext_resource type="FontFile" uid="uid://bklbd5gqwtvak" path="res://assest/font/amazdoom/AmazDooMLeft2.ttf" id="2_2fwvj"]
 [ext_resource type="Texture2D" uid="uid://bev1kjajpw1cq" path="res://assest/background/Dungeon_brick_wall_blue.png.png" id="2_sepwh"]
 [ext_resource type="Theme" uid="uid://mbsg4xqnedxi" path="res://assest/themes/FlatUI4/kenneyUI-red.tres" id="4_sepwh"]
 [ext_resource type="FontFile" uid="uid://jtgco7pl5ab8" path="res://assest/themes/FlatUI4/kenvector_future.ttf" id="5_sepwh"]
+[ext_resource type="AudioStream" uid="uid://bf0ujk6xlemlo" path="res://assest/sounds/pedal_tone_2_electronic.mp3" id="6_14wem"]
+[ext_resource type="PackedScene" uid="uid://b8mdst0n7oq5k" path="res://scene/OptionsMenu.tscn" id="7_2atga"]
 
 [sub_resource type="Theme" id="Theme_sepwh"]
 default_font = ExtResource("2_2fwvj")
@@ -82,3 +84,12 @@ theme_override_fonts/font = ExtResource("5_sepwh")
 theme_override_font_sizes/font_size = 41
 text = "Opções"
 vertical_icon_alignment = 2
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_14wem")
+volume_db = -3.6
+autoplay = true
+
+[node name="OptionsMenu" parent="." instance=ExtResource("7_2atga")]
+
+[connection signal="pressed" from="VBoxContainer/Opcoes" to="." method="_on_opcoes_pressed"]

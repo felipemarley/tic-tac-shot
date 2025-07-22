@@ -1,6 +1,7 @@
 extends Control
 
 @onready var start_game_button: Button = $VBoxContainer/StartGameButton # Arraste seu botão aqui no editor
+@onready var option_menu = $OptionsMenu
 
 func _ready():
 	# mouse livre para interagir com o menu
@@ -9,3 +10,8 @@ func _ready():
 
 func _on_start_game_button_pressed():
 	get_tree().change_scene_to_file("res://scene/level.tscn")
+
+
+func _on_opcoes_pressed() -> void:
+	option_menu.show()
+	

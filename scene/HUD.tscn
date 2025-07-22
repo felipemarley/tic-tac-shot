@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://bhghrhbcmnu10"]
+[gd_scene load_steps=21 format=3 uid="uid://bhghrhbcmnu10"]
 
 [ext_resource type="Script" uid="uid://c7iwygufo6jgf" path="res://scripts/hud.gd" id="1_mmka4"]
 [ext_resource type="FontFile" uid="uid://d24u7vsgokjh6" path="res://assest/font/doom/DooM.ttf" id="2_5nt5s"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://cpnkoy7e432s8" path="res://scene/PauseMenu.tscn" id="5_yx4hk"]
 [ext_resource type="Theme" uid="uid://mbsg4xqnedxi" path="res://assest/themes/FlatUI4/kenneyUI-red.tres" id="6_0qwpj"]
 [ext_resource type="FontFile" uid="uid://jtgco7pl5ab8" path="res://assest/themes/FlatUI4/kenvector_future.ttf" id="6_yxe7t"]
+[ext_resource type="AudioStream" uid="uid://c20pbeg0d1cln" path="res://assest/sounds/pedal_point_loop.mp3" id="9_0twk8"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yx4hk"]
 atlas = ExtResource("4_pgw44")
@@ -318,3 +319,8 @@ text = "Novo Jogo"
 
 [node name="PauseMenu" parent="." instance=ExtResource("5_yx4hk")]
 visible = false
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_0twk8")
+volume_db = -10.0
+autoplay = true
