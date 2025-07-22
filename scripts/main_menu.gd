@@ -16,3 +16,6 @@ func _on_start_game_button_pressed():
 func _on_opcoes_pressed() -> void:
 	option_menu.show()
 	
+
+func _on_sair_pressed() -> void:
+	get_tree().quit()

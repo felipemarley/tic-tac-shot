@@ -54,21 +54,17 @@ theme = SubResource("Theme_sepwh")
 theme_override_colors/font_color = Color(0.803922, 0.984314, 0.117647, 0.976471)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_2fwvj")
-theme_override_font_sizes/font_size = 235
+theme_override_font_sizes/font_size = 200
 text = "Tic-Tac-Shot"
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="Spacer" type="Control" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
 
 [node name="StartGameButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
 theme = ExtResource("4_sepwh")
 theme_override_fonts/font = ExtResource("5_sepwh")
-theme_override_font_sizes/font_size = 41
+theme_override_font_sizes/font_size = 30
 text = "Iniciar Jogo"
 vertical_icon_alignment = 2
 
@@ -81,8 +77,22 @@ layout_mode = 2
 mouse_default_cursor_shape = 2
 theme = ExtResource("4_sepwh")
 theme_override_fonts/font = ExtResource("5_sepwh")
-theme_override_font_sizes/font_size = 41
+theme_override_font_sizes/font_size = 30
 text = "Opções"
+vertical_icon_alignment = 2
+
+[node name="Spacer3" type="Control" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="sair" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme = ExtResource("4_sepwh")
+theme_override_fonts/font = ExtResource("5_sepwh")
+theme_override_font_sizes/font_size = 30
+text = "Sair
+"
 vertical_icon_alignment = 2
 
 [node name="Music" type="AudioStreamPlayer" parent="."]
@@ -93,3 +103,5 @@ autoplay = true
 [node name="OptionsMenu" parent="." instance=ExtResource("7_2atga")]
 
 [connection signal="pressed" from="VBoxContainer/Opcoes" to="." method="_on_opcoes_pressed"]
+[connection signal="pressed" from="VBoxContainer/sair" to="." method="_on_sair_pressed"]
+[connection signal="toggled" from="VBoxContainer/sair" to="." method="_on_sair_toggled"]
