@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://e1w0n8q008ub"]
+[gd_scene load_steps=12 format=3 uid="uid://e1w0n8q008ub"]
 
 [ext_resource type="Script" uid="uid://br2ijnxbj6ovr" path="res://scene/player.gd" id="1_hjaqi"]
 [ext_resource type="PackedScene" uid="uid://bcoqs5sdfav7a" path="res://ui_ux/pistol.tscn" id="1_xo3ru"]
 [ext_resource type="Script" uid="uid://ca72tsi8ai8g4" path="res://scripts/HealthComponent.gd" id="2_ct4mp"]
 [ext_resource type="AudioStream" uid="uid://buwdx34sepcvq" path="res://ui_ux/sounds/land2-43790.mp3" id="3_fvtld"]
+[ext_resource type="AudioStream" uid="uid://eoorm0647uj8" path="res://assest/sounds/02._damage_grunt_male.wav" id="5_s4jxa"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ct4mp"]
 sky_top_color = Color(0.996595, 0.737123, 0.737277, 1)
@@ -75,3 +76,8 @@ bus = &"SDX"
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
 mesh = SubResource("SphereMesh_ct4mp")
+
+[node name="damage_sound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_s4jxa")
+
+[node name="die_sound" type="AudioStreamPlayer" parent="."]

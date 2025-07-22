@@ -82,7 +82,7 @@ animations = [{
 }]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_8u16h"]
-radius = 5.58057
+radius = 4.10449
 
 [node name="Enemy" type="CharacterBody3D" groups=["enemies"]]
 collision_layer = 4

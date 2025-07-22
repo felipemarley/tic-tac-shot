@@ -10,6 +10,15 @@ signal turn_changed(player_side: PlayerSide)
 signal start_fps_level()
 signal animate_cell( x : int, y : int )
 
+signal time_updated(time_left: float, time_percentage: float)
+signal phase_time_limit_changed(new_limit: float)
+
+
+var fps_phase_time_limit: float = 60.0  # Tempo inicial
+var current_time: float = 0.0
+var time_is_running: bool = false
+var difficulty_curve: Curve = Curve.new()  # Para ajustar a progressão
+
 
 
 # GAMEPLAY LOOP
@@ -38,8 +47,45 @@ var enemies_in_current_round: int = 0
 var player_choices_counter: int = 0
 
 func _ready() -> void:
+	difficulty_curve.add_point(Vector2(0, 0.5))  # Fácil no início
+	difficulty_curve.add_point(Vector2(1, 2.0))  # Difícil no final
 	fps_phase_ended.connect(_on_fps_phase_ended)
 	_set_game_state(GameState.MENU)
+	
+func _process(delta: float) -> void:
+	if time_is_running:
+		current_time -= delta
+		if current_time <= 0:
+			current_time = 0
+			time_is_running = false
+			_on_timeout()
+			
+		var time_percentage = current_time / fps_phase_time_limit
+		time_updated.emit(current_time, time_percentage)
+		
+func _on_timeout():
+	# Tempo esgotado - derrota automática
+	if current_player_side == PlayerSide.X:  # Só o jogador humano perde por tempo
+		player_died()
+	else:
+		fps_phase_ended.emit(false, true, current_player_side)
+	reset_fps_round()
+
+func start_new_fps_round(total_enemies: int) -> void:
+	# Ajusta dificuldade baseado no progresso do jogo
+	var progress = float(player_choices_counter) / 9.0
+	var difficulty = difficulty_curve.sample(progress)
+
+	# Define tempo e inimigos balanceados
+	fps_phase_time_limit = max(20.0, 60.0 - (40.0 * progress))  # Diminui tempo
+	enemies_in_current_round = min(15, ceil(total_enemies * (0.5 + difficulty)))  # Limita inimigos
+
+	current_time = fps_phase_time_limit
+	time_is_running = true
+	kill_count = 0
+	phase_time_limit_changed.emit(fps_phase_time_limit)
+	kill_count_changed.emit(kill_count)
+
 
 func _start_new_game() -> void:
 	tic_tac_toe_board.clear()
@@ -94,14 +140,14 @@ func add_kill() -> void:
 	kill_count += 1
 	kill_count_changed.emit(kill_count)
 	if enemies_in_current_round > 0 and kill_count >= enemies_in_current_round:
+		# Zera o timer quando todos os inimigos são mortos
+		time_is_running = false
+		current_time = 0
+		time_updated.emit(current_time, 0.0)
 		fps_phase_ended.emit(true, false, current_player_side)
 		print("Turno atual: ", current_player_side)
 		reset_fps_round()
 
-func start_new_fps_round(total_enemies: int) -> void:
-	enemies_in_current_round = total_enemies
-	kill_count = 0
-	kill_count_changed.emit(kill_count)
 
 func player_died() -> void:
 	print("Turno atual: ", current_player_side)
@@ -111,6 +157,9 @@ func player_died() -> void:
 	reset_fps_round()
 
 func reset_fps_round() -> void:
+	# Garante que o timer seja totalmente resetado
+	time_is_running = false
+	current_time = 0
 	enemies_in_current_round = 0
 	kill_count = 0
 	kill_count_changed.emit(kill_count)
@@ -124,10 +173,28 @@ func _on_fps_phase_ended(wonPlayer: bool, wonAi : bool, player: PlayerSide) -> v
 	if wonPlayer and not wonAi and player == current_player_side and player != PlayerSide.O:
 		print("Jogador venceu, marcando célula para: ", current_player_side)
 		mark_tic_tac_toe_cell(last_chosen_cell.x, last_chosen_cell.y, player)
+				# Verifica vitória imediatamente após marcar
+		if check_tic_tac_toe_win(player):
+			print("Jogo da Velha FINALIZADO! Vencedor: ", player)
+			_set_game_state(GameState.GAME_OVER)
+			return  # Sai da função sem trocar turno
+		elif check_tic_tac_toe_draw():
+			print("Jogo da Velha FINALIZADO! EMPATE.")
+			_set_game_state(GameState.GAME_OVER)
+			return  # Sai da função sem trocar turno
 
 	elif wonAi and not wonPlayer and player == current_player_side and player != PlayerSide.X:
 		print("IA venceu, marcando célula para: ", current_player_side)
 		mark_tic_tac_toe_cell(last_chosen_cell.x, last_chosen_cell.y, player)
+		
+		if check_tic_tac_toe_win(player):
+			print("Jogo da Velha FINALIZADO! Vencedor: ", player)
+			_set_game_state(GameState.GAME_OVER)
+			return  # Sai da função sem trocar turno
+		elif check_tic_tac_toe_draw():
+			print("Jogo da Velha FINALIZADO! EMPATE.")
+			_set_game_state(GameState.GAME_OVER)
+			return  # Sai da função sem trocar turno
 
 	_switch_player_turn()
 	_set_game_state(GameState.TIC_TAC_TOE_TURN)
@@ -227,3 +294,4 @@ func teleport_cheat_enemies_in_front(player_pos: Vector3, player_forward_dir: Ve
 	print("Cheat: Teleported " + str(teleported_enemies_count) + " existing enemies to player front.")
 	# Não precisamos ajustar enemies_in_current_round aqui, pois estamos teleportando os existentes,
 	# e eles já contam na contagem original do round.
+	

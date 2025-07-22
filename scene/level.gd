@@ -1,6 +1,9 @@
 extends Node3D
 
+class_name Level
+
 signal enemies_spawned_for_round(count: int)
+signal dungeon_ready(y : int)
 
 @onready var dun_gen = $DunGen
 @onready var player_scene : PackedScene = preload("res://scene/player.tscn") # Renomeado para evitar conflito com 'player_instance'
@@ -51,25 +54,45 @@ func on_dungeon_ready() -> void:
 
 	player_instance.visible = true
 	player_instance.set_physics_process(true)
-
+	
+	#dungeon_ready.emit(1)
+	
 	# Reseta a vida do jogador quando ele é posicionado para uma nova rodada
 	if player_instance.has_node("HealthComponent"): # Verifica se tem o HealthComponent
 		player_instance.get_node("HealthComponent").reset_health()
 
-	enemy_spawn()
+	enemy_spawn(15)
 	dun_gen.grid_map.clear()
 
 	dun_gen.visible = true
+	adjust_enemies_y(1.1)
 
 	GameManager.player_spawned.emit(player_instance)
+	
+func adjust_enemies_y(new_y: float) -> void:
+	var adjusted_count := 0
+	var enemies = get_tree().get_nodes_in_group("enemies")
+	
+	for enemy in enemies:
+		if not is_instance_valid(enemy):
+			continue
+		if enemy.has_node("HealthComponent") and enemy.get_node("HealthComponent").is_dead:
+			continue
 
-func enemy_spawn() -> void:
+		var pos = enemy.global_position
+		pos.y = new_y
+		enemy.global_position = pos
+		adjusted_count += 1
+
+	print("Altura ajustada de", adjusted_count, "inimigos para Y =", new_y)
+
+func enemy_spawn(min_required) -> void:
 	var spawned_enemy_count : int = 0
 	for cell in dun_gen.grid_map.get_used_cells():
 		for tile in dun_gen.room_tiles:
 			randomize()
 			var spawn_enemy_chanc : int = randi_range(1, (tile.size()/2))
-			if(spawn_enemy_chanc < tile.size() / 2):
+			if(spawn_enemy_chanc < tile.size() / 2 and spawn_enemy_chanc > min_required/24):
 				continue
 			if tile.has(cell):
 				var e = enemy_scene.instantiate()
@@ -79,8 +102,10 @@ func enemy_spawn() -> void:
 				e.died_and_killed.connect(GameManager.add_kill)
 				spawned_enemy_count += 1
 
+	print("Inimigos gerados:", spawned_enemy_count, "| Requerido:", min_required)
 	#enemies_spawned_for_round.emit(spawned_enemy_count-10)
 	enemies_spawned_for_round.emit(spawned_enemy_count)
+
 
 
 # Função para ocultar o mundo FPS

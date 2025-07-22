@@ -7,11 +7,11 @@ signal died_and_killed()
 @onready var navigation : NavigationAgent3D = $NavigationAgent3D
 @onready var health_component = $HealthComponent
 var player_ref : CharacterBody3D = null
-const MOVE_SPEED : float = 15
+const MOVE_SPEED : float = 35
 
-@export var attack_damage: int = 10
-@export var attack_cooldown: float = 0.5
-@export var attack_range: float = 0.9 # Distância para o inimigo atacar o player
+@export var attack_damage: int = 8
+@export var attack_cooldown: float = 0.2
+@export var attack_range: float = 1.1# Distância para o inimigo atacar o player
 var attack_timer: Timer = null # Será inicializado no _ready
 
 const PATH_UPDATE_INTERVAL = 0.2 # Atualizar o caminho 5 vezes por segundo

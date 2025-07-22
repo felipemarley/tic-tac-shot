@@ -13,6 +13,8 @@ extends Control
 @onready var player_anim: AnimatedSprite2D = $CanvasLayer/HudLayout/PlayerAnim
 @onready var health_label: Label = $CanvasLayer/Labels/HealthLabel
 @onready var kill_label2: Label = $CanvasLayer/Labels/KillLabel2
+@onready var timer_label : Label = $CanvasLayer/Labels/Timer
+@onready var timer_bar: TextureProgressBar = $CanvasLayer/Labels/TimerBar # Adicione um TextureProgressBar
 
 # Referências para os elementos do tabuleiro
 @onready var tic_tac_toe_board_container: Control = $CanvasLayer/TicTacToeBoardContainer # O PanelContainer que contém o tabuleiro
@@ -76,7 +78,6 @@ func pauseMenu():
 
 func _ready():
 	pause_menu.hide()
-
 	# HUD está sempre por cima de outros elementos 3D
 	set_process_mode(Node.PROCESS_MODE_ALWAYS)
 
@@ -92,6 +93,8 @@ func _ready():
 	GameManager.game_state_changed.connect(self._on_game_state_changed)
 	GameManager.board_updated.connect(self._on_board_updated)
 	GameManager.turn_changed.connect(self._on_turn_changed)
+	GameManager.time_updated.connect(_on_time_updated)
+	GameManager.phase_time_limit_changed.connect(_on_phase_time_limit_changed)
 
 	# Conectar os botões das células do tabuleiro
 	for r in range(3):
@@ -108,7 +111,22 @@ func _ready():
 	# Inicializa o estado visual da HUD
 	_on_game_state_changed(GameManager.current_game_state) # Define o estado inicial da UI
 	_on_turn_changed(GameManager.current_player_side) # Define o turno inicial
-
+	
+func _on_time_updated(time_left: float, time_percentage: float):
+	timer_label.text = "%.1f" % time_left
+	
+	# Muda cor gradualmente de verde para vermelho
+	if time_percentage > 0.5:
+		timer_label.modulate = Color.GREEN.lerp(Color.YELLOW, (1.0 - time_percentage) * 2.0)
+	else:
+		timer_label.modulate = Color.YELLOW.lerp(Color.RED, (0.5 - time_percentage) * 2.0)
+		
+	timer_bar.value = time_percentage * 100
+	timer_bar.tint_progress = timer_label.modulate
+	
+func _on_phase_time_limit_changed(new_limit: float):
+	timer_bar.max_value = new_limit
+	timer_bar.value = new_limit
 
 func update_kill_count(current_kills: int):
 	if kill_label:
@@ -231,6 +249,8 @@ func _on_game_state_changed(new_state: GameManager.GameState) -> void:
 			player_anim.visible = false
 			health_label.visible = false
 			kill_label2.visible = false
+			timer_label.visible = false
+			timer_bar.visible = false
 			texture_react.visible = false
 			color_react.visible = false
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -250,6 +270,8 @@ func _on_game_state_changed(new_state: GameManager.GameState) -> void:
 			player_anim.visible = false
 			health_label.visible = false
 			kill_label2.visible = false
+			timer_label.visible = false
+			timer_bar.visible = false
 			texture_react.visible = true
 			color_react.visible = true
 			_enable_board_buttons(GameManager.current_player_side == GameManager.PlayerSide.X)
@@ -270,6 +292,8 @@ func _on_game_state_changed(new_state: GameManager.GameState) -> void:
 			player_anim.visible = true
 			health_label.visible = true
 			kill_label2.visible = true
+			timer_label.visible = true
+			timer_bar.visible = true
 			texture_react.visible = false
 			color_react.visible = false
 
@@ -287,6 +311,8 @@ func _on_game_state_changed(new_state: GameManager.GameState) -> void:
 			arma.visible = true
 			player_anim.visible = true
 			health_label.visible = true
+			timer_label.visible = true
+			timer_bar.visible = true
 			kill_label2.visible = true
 			texture_react.visible = false
 			color_react.visible = false
@@ -305,6 +331,8 @@ func _on_game_state_changed(new_state: GameManager.GameState) -> void:
 			player_anim.visible = false
 			health_label.visible = false
 			kill_label2.visible = false
+			timer_label.visible = false
+			timer_bar.visible = true
 			texture_react.visible = true
 			color_react.visible = true
 			game_status_timer.stop()
