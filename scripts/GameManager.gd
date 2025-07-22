@@ -3,174 +3,191 @@ extends Node
 # SIGNALS
 signal kill_count_changed(new_count: int)
 signal player_spawned(player: Node)
-signal fps_phase_ended(won: bool) # Sinaliza o fim de uma fase FPS
-signal game_state_changed(new_state: GameState) # Sinaliza mudança de estado do jogo
-signal board_updated(board_state: Array[Array]) # Sinaliza atualização do tabuleiro
-signal turn_changed(player_side: PlayerSide) # Sinaliza mudança de turno
-signal start_fps_level() # Sinal para o Level.gd iniciar a fase FPS
+signal fps_phase_ended(wonPlay: bool, wonAi: bool, player: PlayerSide)  # Modificado para incluir o jogador
+signal game_state_changed(new_state: GameState)
+signal board_updated(board_state: Array[Array])
+signal turn_changed(player_side: PlayerSide)
+signal start_fps_level()
 
 # GAMEPLAY LOOP
 enum PlayerSide {
-	NONE = 0, # Para estado inicial ou célula vazia
-	X = 1,    # Jogador X
-	O = 2     # Jogador O
+	NONE = 0,
+	X = 1,
+	O = 2
 }
 
 enum GameState {
-	MENU,              # Tela inicial, escolha X/O
-	TIC_TAC_TOE_TURN,  # Jogador escolhe célula no tabuleiro
-	FPS_PHASE,         # Fase de combate FPS
-	ROUND_END,         # Resultado da fase FPS, atualiza tabuleiro
-	GAME_OVER          # Jogo da velha finalizado (vitória/derrota/empate)
+	MENU,
+	TIC_TAC_TOE_TURN,
+	FPS_PHASE,
+	ROUND_END,
+	GAME_OVER
 }
 
-var current_game_state: GameState = GameState.MENU # Estado inicial
-var tic_tac_toe_board: Array[Array] = [] # Será inicializado em _ready
+var current_game_state: GameState = GameState.MENU
+var tic_tac_toe_board: Array[Array] = []
 var current_player_side: PlayerSide = PlayerSide.X
-var last_chosen_cell: Vector2i = Vector2i(-1, -1) # Armazena a célula escolhida antes da fase FPS
+var last_chosen_cell: Vector2i = Vector2i(-1, -1)
 
 # FPS PHASE
 var kill_count: int = 0
-var enemies_in_current_round: int = 0 # Rastreia o total de inimigos para o round FPS atual
-var player_choices_counter: int = 0 # Controlar o número de jogadas (para empate)
+var enemies_in_current_round: int = 0
+var player_choices_counter: int = 0
 
 func _ready() -> void:
 	fps_phase_ended.connect(_on_fps_phase_ended)
 	_set_game_state(GameState.MENU)
-	# _start_new_game()
 
-# Função para inicializar/reiniciar o jogo
 func _start_new_game() -> void:
-	# Inicializa o tabuleiro 3x3 com PlayerSide.NONE (vazio)
 	tic_tac_toe_board.clear()
 	for i in range(3):
 		tic_tac_toe_board.append([PlayerSide.NONE, PlayerSide.NONE, PlayerSide.NONE])
 
-	current_player_side = PlayerSide.X # Começa com X
-	player_choices_counter = 0 # Reseta o contador de jogadas
+	current_player_side = PlayerSide.X
+	player_choices_counter = 0
+	_set_game_state(GameState.TIC_TAC_TOE_TURN)
+	turn_changed.emit(current_player_side)
+	board_updated.emit(tic_tac_toe_board)
 
-	_set_game_state(GameState.TIC_TAC_TOE_TURN) # Inicia no turno do jogo da velha
-	turn_changed.emit(current_player_side) # Notifica a HUD sobre o turno
-	board_updated.emit(tic_tac_toe_board) # Notifica a HUD sobre o tabuleiro
-
- # Função para mudar o estado do jogo
 func _set_game_state(new_state: GameState) -> void:
 	current_game_state = new_state
 	game_state_changed.emit(new_state)
 
-# Chamado pela HUD quando o jogador escolhe uma célula no tabuleiro
 func choose_tic_tac_toe_cell(row: int, col: int) -> void:
 	if current_game_state != GameState.TIC_TAC_TOE_TURN:
-		print("DEBUG: Não é o turno do jogo da velha para escolher uma célula.")
 		return
 	if row < 0 or row > 2 or col < 0 or col > 2:
-		printerr("ERROR: Célula inválida: (", row, ", ", col, ")")
 		return
 	if tic_tac_toe_board[row][col] != PlayerSide.NONE:
-		print("DEBUG: Célula já ocupada: (", row, ", ", col, ")")
 		return
 
-	last_chosen_cell = Vector2i(row, col) # Armazena a célula para marcar depois da fase FPS
+	last_chosen_cell = Vector2i(row, col)
 	_set_game_state(GameState.FPS_PHASE)
-	start_fps_level.emit() # Sinaliza para o Level.gd iniciar a fase FPS
+	start_fps_level.emit()
 
-
-# Marca uma célula no tabuleiro
 func mark_tic_tac_toe_cell(row: int, col: int, player_id: PlayerSide) -> void:
 	if row >= 0 and row < 3 and col >= 0 and col < 3 and tic_tac_toe_board[row][col] == PlayerSide.NONE:
 		tic_tac_toe_board[row][col] = player_id
 		player_choices_counter += 1
 		board_updated.emit(tic_tac_toe_board)
-	else:
-		printerr("ERROR: Tentativa de marcar célula inválida ou já ocupada: (", row, ", ", col, ") com ", player_id)
 
-
-# Verifica se o jogador atual venceu o jogo da velha
 func check_tic_tac_toe_win(player_id: PlayerSide) -> bool:
-	# Verificar linhas
-	for r in range(3):
-		if tic_tac_toe_board[r][0] == player_id and tic_tac_toe_board[r][1] == player_id and tic_tac_toe_board[r][2] == player_id:
+	# Verifica linhas, colunas e diagonais
+	for i in range(3):
+		if tic_tac_toe_board[i][0] == player_id and tic_tac_toe_board[i][1] == player_id and tic_tac_toe_board[i][2] == player_id:
 			return true
-	# Verificar colunas
-	for c in range(3):
-		if tic_tac_toe_board[0][c] == player_id and tic_tac_toe_board[1][c] == player_id and tic_tac_toe_board[2][c] == player_id:
+		if tic_tac_toe_board[0][i] == player_id and tic_tac_toe_board[1][i] == player_id and tic_tac_toe_board[2][i] == player_id:
 			return true
-	# Verificar diagonais
 	if tic_tac_toe_board[0][0] == player_id and tic_tac_toe_board[1][1] == player_id and tic_tac_toe_board[2][2] == player_id:
 		return true
 	if tic_tac_toe_board[0][2] == player_id and tic_tac_toe_board[1][1] == player_id and tic_tac_toe_board[2][0] == player_id:
 		return true
 	return false
 
-# Verifica se o jogo da velha empatou
 func check_tic_tac_toe_draw() -> bool:
 	return player_choices_counter == 9 and not (check_tic_tac_toe_win(PlayerSide.X) or check_tic_tac_toe_win(PlayerSide.O))
 
 func add_kill() -> void:
 	kill_count += 1
 	kill_count_changed.emit(kill_count)
-
-	# Verifica se todos os inimigos foram derrotados no round
 	if enemies_in_current_round > 0 and kill_count >= enemies_in_current_round:
-		fps_phase_ended.emit(true)
+		fps_phase_ended.emit(true, false, current_player_side)
+		print("Turno atual: ", current_player_side)
 		reset_fps_round()
 
-# novo round
 func start_new_fps_round(total_enemies: int) -> void:
 	enemies_in_current_round = total_enemies
-	print(enemies_in_current_round)
-	kill_count = 0 # Resetar kill_count para o novo round
-	kill_count_changed.emit(kill_count) # Garantir que a HUD seja atualizada para 0 kills
+	kill_count = 0
+	kill_count_changed.emit(kill_count)
 
- # Chamado quando o jogador morre
 func player_died() -> void:
-	print("GameManager: Player died in FPS phase. Resetting round.")
-	fps_phase_ended.emit(false)
+	print("Turno atual: ", current_player_side)
+
+	fps_phase_ended.emit(false, true, current_player_side)
+
 	reset_fps_round()
 
-# Função auxiliar para resetar contadores do round
 func reset_fps_round() -> void:
 	enemies_in_current_round = 0
 	kill_count = 0
 	kill_count_changed.emit(kill_count)
 
-# Função para lidar com o fim de uma fase FPS e AGORA a lógica do Jogo da Velha
-func _on_fps_phase_ended(won: bool) -> void:
-	_set_game_state(GameState.ROUND_END) # Muda para estado de fim de round
+func _on_fps_phase_ended(wonPlayer: bool, wonAi : bool, player: PlayerSide) -> void:
+	_set_game_state(GameState.ROUND_END)
 
-	if won:
-		print("GameManager: Fase FPS Vencida!")
-		mark_tic_tac_toe_cell(last_chosen_cell.x, last_chosen_cell.y, current_player_side) # Marca a célula
+	print("FPS Phase Result - \n won player? : ", wonPlayer, " | Player: ", player, " | Current Turn: ", current_player_side)
+	print("FPS Phase Result - \n won Ai? : ", wonAi, " | Player: ", player, " | Current Turn: ", current_player_side)
 
-		if check_tic_tac_toe_win(current_player_side):
-			_set_game_state(GameState.GAME_OVER)
-			print("GameManager: Jogo da Velha FINALIZADO! Vencedor: ", current_player_side)
-		elif check_tic_tac_toe_draw():
-			_set_game_state(GameState.GAME_OVER)
-			print("GameManager: Jogo da Velha FINALIZADO! EMPATE.")
-		else:
-			# Passa a vez e prepara para o próximo turno do jogo da velha
-			_switch_player_turn()
-			_set_game_state(GameState.TIC_TAC_TOE_TURN)
+	if wonPlayer and not wonAi and player == current_player_side and player != PlayerSide.O:
+		print("Jogador venceu, marcando célula para: ", current_player_side)
+		mark_tic_tac_toe_cell(last_chosen_cell.x, last_chosen_cell.y, player)
 
-			print("GameManager: Turno do Jogo da Velha. Próximo jogador: ", current_player_side)
-			if current_player_side == PlayerSide.O:
-				_process_ai_turn()
-	else: # Perdeu a fase FPS
-		print("GameManager: Fase FPS Perdida!")
-		_switch_player_turn() # Apenas passa a vez (não marca a célula)
-		_set_game_state(GameState.TIC_TAC_TOE_TURN)
-		# Se o próximo turno for da IA, ela joga automaticamente
-		print("GameManager: Turno do Jogo da Velha. Próximo jogador: ", current_player_side)
-		if current_player_side == PlayerSide.O:
-			_process_ai_turn()
+	elif wonAi and not wonPlayer and player == current_player_side and player != PlayerSide.X:
+		print("IA venceu, marcando célula para: ", current_player_side)
+		mark_tic_tac_toe_cell(last_chosen_cell.x, last_chosen_cell.y, player)
 
-# Função auxiliar para trocar o turno
+	_switch_player_turn()
+	_set_game_state(GameState.TIC_TAC_TOE_TURN)
+	
+	if current_player_side == PlayerSide.O:
+		_process_ai_turn()
+
 func _switch_player_turn() -> void:
 	current_player_side = PlayerSide.X if current_player_side == PlayerSide.O else PlayerSide.O
-	turn_changed.emit(current_player_side) # Notifica a HUD
+	turn_changed.emit(current_player_side)
 
+func _process_ai_turn() -> void:
+	if current_game_state != GameState.TIC_TAC_TOE_TURN or current_player_side != PlayerSide.O:
+		return
 
+	await get_tree().create_timer(0.5).timeout
+
+	var best_move := find_best_move(PlayerSide.O, PlayerSide.X)
+	if best_move != Vector2i(-1, -1):
+		last_chosen_cell = best_move
+		_set_game_state(GameState.FPS_PHASE)
+		start_fps_level.emit()
+
+func find_best_move(ai: PlayerSide, opponent: PlayerSide) -> Vector2i:
+	# 1. Verifica se pode vencer
+	for r in range(3):
+		for c in range(3):
+			if tic_tac_toe_board[r][c] == PlayerSide.NONE:
+				tic_tac_toe_board[r][c] = ai
+				if check_tic_tac_toe_win(ai):
+					tic_tac_toe_board[r][c] = PlayerSide.NONE
+					return Vector2i(r, c)
+				tic_tac_toe_board[r][c] = PlayerSide.NONE
+
+	# 2. Verifica se precisa bloquear
+	for r in range(3):
+		for c in range(3):
+			if tic_tac_toe_board[r][c] == PlayerSide.NONE:
+				tic_tac_toe_board[r][c] = opponent
+				if check_tic_tac_toe_win(opponent):
+					tic_tac_toe_board[r][c] = PlayerSide.NONE
+					return Vector2i(r, c)
+				tic_tac_toe_board[r][c] = PlayerSide.NONE
+
+	# 3. Pega centro se disponível
+	if tic_tac_toe_board[1][1] == PlayerSide.NONE:
+		return Vector2i(1, 1)
+
+	# 4. Pega cantos se disponíveis
+	var corners := [Vector2i(0, 0), Vector2i(0, 2), Vector2i(2, 0), Vector2i(2, 2)]
+	for corner in corners:
+		if tic_tac_toe_board[corner.x][corner.y] == PlayerSide.NONE:
+			return corner
+
+	# 5. Qualquer célula vazia
+	for r in range(3):
+		for c in range(3):
+			if tic_tac_toe_board[r][c] == PlayerSide.NONE:
+				return Vector2i(r, c)
+
+	# Sem jogada possível
+	return Vector2i(-1, -1)
+	
 func teleport_cheat_enemies_in_front(player_pos: Vector3, player_forward_dir: Vector3) -> void: # <--- FUNÇÃO RENOMEADA
 	var teleport_distance: float = 5.0 # Distância na frente do player
 	var spread_radius: float = 2.0  # Raio para espalhar os inimigos
@@ -201,45 +218,3 @@ func teleport_cheat_enemies_in_front(player_pos: Vector3, player_forward_dir: Ve
 	print("Cheat: Teleported " + str(teleported_enemies_count) + " existing enemies to player front.")
 	# Não precisamos ajustar enemies_in_current_round aqui, pois estamos teleportando os existentes,
 	# e eles já contam na contagem original do round.
-
-func _process_ai_turn() -> void:
-	# Garante que a IA só jogue se for o turno dela e o estado estiver correto
-	if current_game_state != GameState.TIC_TAC_TOE_TURN or current_player_side != PlayerSide.O:
-		return
-
-	print("GameManager: Turno da IA (O).")
-
-	# Opcional: Pequeno delay para simular que a IA está "pensando"
-	await get_tree().create_timer(0.5).timeout
-
-	var empty_cells: Array[Vector2i] = []
-	# Encontra todas as células vazias no tabuleiro
-	for r in range(3):
-		for c in range(3):
-			if tic_tac_toe_board[r][c] == PlayerSide.NONE:
-				empty_cells.append(Vector2i(r, c))
-
-	if not empty_cells.is_empty():
-		# IA escolhe uma célula vazia aleatoriamente
-		var chosen_cell = empty_cells[randi() % empty_cells.size()]
-		mark_tic_tac_toe_cell(chosen_cell.x, chosen_cell.y, PlayerSide.O) # IA marca a célula
-		print("IA marcou: ", chosen_cell)
-
-		# Após a IA marcar, verifica se o jogo terminou (vitória da IA ou empate)
-		if check_tic_tac_toe_win(current_player_side):
-			_set_game_state(GameState.GAME_OVER)
-			print("GameManager: Jogo da Velha FINALIZADO! Vencedor: IA (O)")
-		elif check_tic_tac_toe_draw():
-			_set_game_state(GameState.GAME_OVER)
-			print("GameManager: Jogo da Velha FINALIZADO! EMPATE.")
-		else:
-			# Se o jogo não terminou, passa a vez de volta para o jogador (X)
-			_switch_player_turn()
-			_set_game_state(GameState.TIC_TAC_TOE_TURN)
-			print("GameManager: Turno do Jogo da Velha. Próximo jogador: ", current_player_side)
-	else:
-		# Isso só deve acontecer se o tabuleiro já estiver cheio e for um empate (ou já houve um vencedor)
-		print("IA: Nenhuma célula vazia encontrada.")
-		if check_tic_tac_toe_draw():
-			_set_game_state(GameState.GAME_OVER)
-			print("GameManager: Jogo da Velha FINALIZADO! EMPATE.")

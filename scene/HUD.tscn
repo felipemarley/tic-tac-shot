@@ -226,10 +226,14 @@ text = "KILLS"
 vertical_alignment = 1
 
 [node name="GameStatusLabel" type="Label" parent="CanvasLayer/Labels"]
-offset_left = 422.0
-offset_top = 84.0
-offset_right = 730.0
-offset_bottom = 107.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -155.0
+offset_top = 48.0
+offset_right = 153.0
+offset_bottom = 71.0
+grow_horizontal = 2
 theme_override_fonts/font = ExtResource("6_yxe7t")
 text = "Tic-Tac-Shot"
 horizontal_alignment = 1
